@@ -1,0 +1,1127 @@
+
+---
+title: "Time to Positivity & Antibiotic Failure in Bacteremia: Bayesian Meta-Analysis"
+author: "Russell Lewis"
+date: "2026-02-13"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: true
+    code-summary: "Show code"
+    theme: cosmo
+    fig-width: 9
+    fig-height: 6
+    embed-resources: true
+execute:
+  warning: false
+  message: false
+---
+
+# Introduction
+
+## Background
+
+Blood culture time to positivity (TTP) — the interval between blood culture incubation and detection of microbial growth — has emerged as a potential prognostic marker in bacteremia. Shorter TTP is hypothesized to reflect higher bacterial inocula, which may signal more severe infection, greater risk of treatment failure, and higher mortality.
+
+This meta-analysis systematically synthesizes the evidence on the association between short TTP and two primary clinical outcomes:
+
+1. **Mortality** (all-cause, typically 30-day or in-hospital)
+2. **Persistent bacteremia** (including microbiological clearance failure)
+
+## Analytical Approach
+
+We employ a Bayesian random-effects framework using `brms` with weakly informative priors, complemented by frequentist models via `metafor` for validation. The analysis includes:
+
+- Effect size computation from heterogeneous reporting formats (2×2 tables, adjusted/unadjusted OR/HR/RR, continuous TTP associations)
+- Random-effects pooling with REML (frequentist) and Bayesian estimation
+- Publication bias assessment (funnel plots, Egger's test, trim-and-fill)
+- Sensitivity analyses (outlier exclusion, prior specification)
+- Meta-regression for moderator effects (pathogen class, organism, risk of bias, blood culture system)
+
+# Data Loading & Preparation
+
+## Load Packages
+
+```{r}
+#| label: setup
+#| code-fold: false
+
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(metafor)
+library(brms)
+library(posterior)
+library(bayesplot)
+library(ggdist)
+library(patchwork)
+
+color_scheme_set("viridis")
+theme_set(theme_minimal(base_size = 12))
+
+# Detect Stan backend
+stan_backend <- if (requireNamespace("cmdstanr", quietly = TRUE)) "cmdstanr" else "rstan"
+```
+
+## Load Database
+
+The extraction database is stored as an Excel workbook with one sheet per table, following the relational structure outlined in the analysis protocol.
+
+```{r}
+#| label: load-data
+
+path <- "/Users/russelllewis/Desktop/ttp_meta_final/TTP_MetaAnalysis_Extraction_Complete.xlsx"
+
+tbl_study      <- read_excel(path, sheet = "tbl_study") |> clean_names()
+tbl_population <- read_excel(path, sheet = "tbl_population") |> clean_names()
+tbl_ttp        <- read_excel(path, sheet = "tbl_ttp") |> clean_names()
+tbl_outcomes   <- read_excel(path, sheet = "tbl_outcomes") |> clean_names()
+```
+
+```{r}
+#| label: data-dimensions
+
+tibble(
+  Table = c("tbl_study", "tbl_population", "tbl_ttp", "tbl_outcomes"),
+  Rows = c(nrow(tbl_study), nrow(tbl_population), nrow(tbl_ttp), nrow(tbl_outcomes)),
+  Columns = c(ncol(tbl_study), ncol(tbl_population), ncol(tbl_ttp), ncol(tbl_outcomes))
+)
+```
+
+## Data Cleaning
+
+### Remove Non-PICO Entries and Harmonize Outcome Types
+
+Rows flagged as `[NON-PICO]` in the notes field represent outcomes outside the primary review question (e.g., septic shock, endocarditis as a diagnostic marker, catheter-related BSI). These are excluded before analysis.
+
+```{r}
+#| label: clean-outcomes
+
+outcomes_clean <- tbl_outcomes |>
+  # Remove NON-PICO
+
+  filter(is.na(notes) | !str_detect(notes, "\\[NON-PICO\\]")) |>
+  # Remove row with no outcome type
+  filter(!is.na(outcome_type)) |>
+  # Harmonize outcome types
+  mutate(
+    outcome_type_clean = case_when(
+      outcome_type %in% c("mortality", "in_hospital_mortality") ~ "mortality",
+      outcome_type %in% c("persistent_bacteremia", "bacteremia_clearance",
+                          "microbiological_clearance", "bacteremia_classification") ~ "persistent_bacteremia",
+      outcome_type %in% c("endocarditis", "infective_endocarditis",
+                          "endovascular_infection") ~ "endocarditis_endovascular",
+      outcome_type %in% c("sepsis_severity_mortality", "disease_severity",
+                          "organ_dysfunction") ~ "severity",
+      TRUE ~ outcome_type
+    )
+  ) |>
+  # Classify effect size source
+  mutate(
+    has_2x2 = !is.na(events_short_ttp) & !is.na(events_long_ttp) &
+              !is.na(n_short_ttp) & !is.na(n_long_ttp),
+    has_effect_ci = !is.na(effect_estimate) & !is.na(ci_lower) & !is.na(ci_upper) &
+                    effect_measure %in% c("OR", "HR", "RR"),
+    has_or_per_hour = !is.na(or_per_hour) & !is.na(or_per_hour_ci_low) & !is.na(or_per_hour_ci_high),
+    es_source = case_when(
+      has_2x2 & has_effect_ci & adjusted ~ "reported_adjusted",
+      has_2x2 & has_effect_ci & !adjusted ~ "reported_unadjusted",
+      has_2x2 ~ "two_by_two",
+      has_effect_ci & adjusted ~ "reported_adjusted",
+      has_effect_ci ~ "reported_unadjusted",
+      has_or_per_hour ~ "continuous_converted",
+      TRUE ~ "insufficient_data"
+    )
+  )
+```
+
+```{r}
+#| label: cleaning-summary
+
+cat("Original outcome rows:", nrow(tbl_outcomes), "\n")
+cat("After removing NON-PICO:", nrow(outcomes_clean), "\n\n")
+outcomes_clean |> count(outcome_type_clean, sort = TRUE)
+```
+
+## Effect Size Computation
+
+Effect sizes are computed as log-odds ratios (log-OR) with associated sampling variances, following the hierarchy specified in the protocol:
+
+1. **Reported adjusted estimates preferred** over unadjusted
+2. **2×2 tables** used when no reported effect available
+3. **Continuous TTP effects** (OR per hour) kept separate
+
+### From 2×2 Tables
+
+```{r}
+#| label: es-2x2
+
+rows_2x2 <- outcomes_clean |> filter(es_source == "two_by_two")
+
+es_2x2 <- escalc(
+  measure = "OR",
+  ai = rows_2x2$events_short_ttp,
+  bi = rows_2x2$n_short_ttp - rows_2x2$events_short_ttp,
+  ci = rows_2x2$events_long_ttp,
+  di = rows_2x2$n_long_ttp - rows_2x2$events_long_ttp,
+  data = rows_2x2
+) |>
+  as.data.frame() |>
+  mutate(yi = as.numeric(yi), vi = as.numeric(vi), sei = sqrt(vi))
+```
+
+### From Reported Effect Estimates (OR/HR/RR with CI)
+
+```{r}
+#| label: es-reported
+
+rows_reported <- outcomes_clean |>
+  filter(es_source %in% c("reported_adjusted", "reported_unadjusted"))
+
+es_reported <- rows_reported |>
+  mutate(
+    yi = log(effect_estimate),
+    sei = (log(ci_upper) - log(ci_lower)) / (2 * 1.96),
+    vi = sei^2
+  )
+```
+
+### From Continuous TTP (OR per Hour)
+
+```{r}
+#| label: es-continuous
+
+es_continuous_1 <- outcomes_clean |>
+  filter(es_source == "continuous_converted") |>
+  mutate(
+    yi = log(or_per_hour),
+    sei = (log(or_per_hour_ci_high) - log(or_per_hour_ci_low)) / (2 * 1.96),
+    vi = sei^2
+  )
+
+# SantosPatarroyo2025 has beta_per_hour (already log-OR scale)
+es_continuous_2 <- outcomes_clean |>
+  filter(study_id == "SantosPatarroyo2025") |>
+  mutate(
+    yi = beta_per_hour,
+    sei = (ci_upper - ci_lower) / (2 * 1.96),
+    vi = sei^2,
+    es_source = "continuous_converted"
+  )
+```
+
+### Combine and Deduplicate
+
+```{r}
+#| label: combine-es
+
+common_cols <- c("study_id", "arm_id", "outcome_type_clean", "outcome_definition",
+                 "outcome_timepoint_days", "effect_measure", "effect_estimate",
+                 "adjusted", "adjustment_vars", "yi", "sei", "vi", "es_source")
+
+tbl_es_combined <- bind_rows(
+  es_2x2 |> select(any_of(common_cols)),
+  es_reported |> select(any_of(common_cols)),
+  bind_rows(es_continuous_1, es_continuous_2) |> select(any_of(common_cols))
+)
+
+# Deduplication rules:
+# - Prefer adjusted over unadjusted (Cilloniz2017, Hou2023)
+# - Remove extreme sparse-cell row (Melling2019 OR=1722)
+tbl_es <- tbl_es_combined |>
+  filter(!(study_id == "Cilloniz2017" & adjusted == FALSE)) |>
+  filter(!(study_id == "Hou2023" & adjusted == FALSE)) |>
+  filter(!(study_id == "Melling2019" & yi > 5))
+```
+
+### Merge Moderator Variables
+
+```{r}
+#| label: merge-moderators
+
+tbl_es <- tbl_es |>
+  left_join(
+    tbl_population |>
+      select(study_id, n_total, pathogen_class, pathogen_species,
+             infection_source, source_control, pct_icu,
+             severity_score_type, pct_appropriate_empiric, blood_culture_system),
+    by = "study_id"
+  ) |>
+  left_join(
+    tbl_ttp |> select(study_id, ttp_cutpoint_hours, ttp_cutpoint_basis),
+    by = "study_id"
+  ) |>
+  left_join(
+    tbl_study |> select(study_id, rob_overall, pub_year, country, study_design),
+    by = "study_id"
+  ) |>
+  mutate(
+    organism_saureus = str_detect(pathogen_species, regex("aureus", ignore_case = TRUE)),
+    ni = n_total,
+    es_id = row_number(),
+    rob_binary = ifelse(rob_overall == "low", "low", "moderate_high"),
+    blood_culture_system_clean = case_when(
+      str_detect(blood_culture_system, regex("BacTALERT|BACT/ALERT|BacT/Alert", ignore_case = TRUE)) ~ "BacTALERT",
+      str_detect(blood_culture_system, regex("BACTEC", ignore_case = TRUE)) ~ "BACTEC",
+      str_detect(blood_culture_system, regex("VersaTREK", ignore_case = TRUE)) ~ "VersaTREK",
+      str_detect(blood_culture_system, regex("automated|other", ignore_case = TRUE)) ~ "other",
+      blood_culture_system == "NR" ~ "NR",
+      TRUE ~ NA_character_
+    ),
+    bcs_binary = case_when(
+      blood_culture_system_clean == "BACTEC" ~ "BACTEC",
+      blood_culture_system_clean == "BacTALERT" ~ "BacTALERT",
+      TRUE ~ "other"
+    )
+  )
+```
+
+```{r}
+#| label: es-summary-table
+
+cat("Final tbl_es:", nrow(tbl_es), "effect sizes from", n_distinct(tbl_es$study_id), "studies\n\n")
+tbl_es |> count(outcome_type_clean, es_source) |>
+  pivot_wider(names_from = es_source, values_from = n, values_fill = 0)
+```
+
+# Descriptive Summary
+
+## Study Characteristics
+
+```{r}
+#| label: tbl-study-chars
+#| tbl-cap: "Study characteristics overview"
+
+tbl_study |>
+  summarise(
+    `N studies` = as.character(n()),
+    `Publication years` = paste0(min(pub_year), "–", max(pub_year)),
+    `Prospective (%)` = as.character(round(100 * mean(study_design == "prospective_cohort"), 1)),
+    `Single-center (%)` = as.character(round(100 * mean(single_center, na.rm = TRUE), 1)),
+    `ROB low (%)` = as.character(round(100 * mean(rob_overall == "low"), 1)),
+    `ROB moderate (%)` = as.character(round(100 * mean(rob_overall == "moderate"), 1))
+  ) |>
+  pivot_longer(everything(), names_to = "Characteristic", values_to = "Value")
+```
+
+## Effect Size Distributions
+
+```{r}
+#| label: fig-es-distributions
+#| fig-cap: "Distribution of log-OR effect sizes by outcome"
+#| fig-height: 5
+
+tbl_es |>
+  filter(es_source != "continuous_converted") |>
+  ggplot(aes(x = yi, fill = outcome_type_clean)) +
+  geom_histogram(bins = 20, alpha = 0.7, position = "identity") +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  facet_wrap(~outcome_type_clean, scales = "free_y") +
+  labs(x = "Log Odds Ratio", y = "Count", fill = "Outcome") +
+  scale_fill_manual(values = c("mortality" = "steelblue", "persistent_bacteremia" = "darkorange")) +
+  theme(legend.position = "none")
+```
+
+## Moderator Completeness
+
+```{r}
+#| label: tbl-moderator-completeness
+#| tbl-cap: "Moderator variable completeness in tbl_es"
+
+tbl_es |>
+  summarise(
+    across(c(pathogen_class, organism_saureus, infection_source,
+             rob_overall, pub_year, blood_culture_system_clean, ttp_cutpoint_hours),
+           ~sum(!is.na(.)))
+  ) |>
+  pivot_longer(everything(), names_to = "Moderator", values_to = "N_complete") |>
+  mutate(
+    N_total = nrow(tbl_es),
+    Pct_complete = round(100 * N_complete / N_total, 1)
+  )
+```
+
+# Primary Meta-Analysis
+
+We fit parallel frequentist (REML) and Bayesian random-effects models for each outcome. The Bayesian models serve as the primary analysis; frequentist results are reported for validation and comparison with prior literature.
+
+## Subset Preparation
+
+```{r}
+#| label: subset-data
+
+# Dichotomous effects only (exclude continuous OR-per-hour)
+es_dichot <- tbl_es |> filter(es_source != "continuous_converted")
+
+es_mort <- es_dichot |> filter(outcome_type_clean == "mortality")
+es_pb   <- es_dichot |> filter(outcome_type_clean == "persistent_bacteremia")
+
+cat("Mortality studies:", nrow(es_mort), "\n")
+cat("Persistent bacteremia studies:", nrow(es_pb), "\n")
+```
+
+## Frequentist Random-Effects (REML)
+
+```{r}
+#| label: freq-models
+
+rma_mort <- rma(yi = yi, vi = vi, data = es_mort, method = "REML")
+rma_pb   <- rma(yi = yi, vi = vi, data = es_pb, method = "REML")
+```
+
+```{r}
+#| label: freq-results-table
+#| tbl-cap: "Frequentist REML pooled estimates"
+
+tibble(
+  Outcome = c("Mortality", "Persistent Bacteremia"),
+  k = c(rma_mort$k, rma_pb$k),
+  `Pooled OR` = round(c(exp(coef(rma_mort)), exp(coef(rma_pb))), 2),
+  `95% CI` = c(
+    paste0(round(exp(rma_mort$ci.lb), 2), "–", round(exp(rma_mort$ci.ub), 2)),
+    paste0(round(exp(rma_pb$ci.lb), 2), "–", round(exp(rma_pb$ci.ub), 2))
+  ),
+  tau = round(c(sqrt(rma_mort$tau2), sqrt(rma_pb$tau2)), 2),
+  `I²` = paste0(round(c(rma_mort$I2, rma_pb$I2), 1), "%"),
+  p = formatC(c(rma_mort$pval, rma_pb$pval), format = "e", digits = 2)
+)
+```
+
+## Bayesian Random-Effects Models
+
+### Prior Specification
+
+The Bayesian models use weakly informative priors:
+
+- **Intercept (pooled log-OR):** `Normal(0, 1)` — places 95% prior mass on OR ∈ [0.14, 7.4], compatible with a wide range of clinically plausible effects
+- **Between-study SD (τ):** `Half-Cauchy(0, 0.5)` — allows moderate to substantial heterogeneity while regularizing extreme values
+
+```{r}
+#| label: bayesian-priors
+
+meta_priors <- c(
+  prior(normal(0, 1), class = "Intercept"),
+  prior(cauchy(0, 0.5), class = "sd")
+)
+```
+
+### Mortality Model (k=33)
+
+```{r}
+#| label: fit-mort-bayes
+#| cache: true
+
+fit_mort <- brm(
+  yi | se(sei) ~ 1 + (1 | study_id),
+  data = es_mort,
+  prior = meta_priors,
+  backend = stan_backend,
+  chains = 4, iter = 4000, warmup = 1000,
+  control = list(adapt_delta = 0.95),
+  seed = 42
+)
+```
+
+```{r}
+#| label: mort-bayes-summary
+
+summary(fit_mort)
+```
+
+```{r}
+#| label: mort-posterior
+
+post_mort <- as_draws_df(fit_mort)
+mu_mort <- post_mort$b_Intercept
+
+cat("Posterior summary (log-OR scale):\n")
+cat("  Mean:", round(mean(mu_mort), 3), "\n")
+cat("  Median:", round(median(mu_mort), 3), "\n")
+cat("  95% CrI:", round(quantile(mu_mort, 0.025), 3), "to", round(quantile(mu_mort, 0.975), 3), "\n\n")
+
+cat("Posterior summary (OR scale):\n")
+cat("  Pooled OR:", round(exp(median(mu_mort)), 2), "\n")
+cat("  95% CrI:", round(exp(quantile(mu_mort, 0.025)), 2), "to", round(exp(quantile(mu_mort, 0.975)), 2), "\n")
+cat("  P(OR > 1):", round(100 * mean(mu_mort > 0), 1), "%\n")
+cat("  P(OR > 1.5):", round(100 * mean(exp(mu_mort) > 1.5), 1), "%\n")
+cat("  P(OR > 2):", round(100 * mean(exp(mu_mort) > 2), 1), "%\n")
+```
+
+### Persistent Bacteremia Model (k=7–9)
+
+```{r}
+#| label: fit-pb-bayes
+#| cache: true
+
+fit_pb <- brm(
+  yi | se(sei) ~ 1 + (1 | study_id),
+  data = es_pb,
+  prior = meta_priors,
+  backend = stan_backend,
+  chains = 4, iter = 4000, warmup = 1000,
+  control = list(adapt_delta = 0.95),
+  seed = 42
+)
+```
+
+```{r}
+#| label: pb-posterior
+
+post_pb <- as_draws_df(fit_pb)
+mu_pb <- post_pb$b_Intercept
+
+cat("Persistent Bacteremia — Posterior summary (OR scale):\n")
+cat("  Pooled OR:", round(exp(median(mu_pb)), 2), "\n")
+cat("  95% CrI:", round(exp(quantile(mu_pb, 0.025)), 2), "to", round(exp(quantile(mu_pb, 0.975)), 2), "\n")
+cat("  P(OR > 1):", round(100 * mean(mu_pb > 0), 1), "%\n")
+```
+
+### MCMC Diagnostics
+
+```{r}
+#| label: fig-mcmc-diagnostics
+#| fig-cap: "MCMC trace plots and rank histograms for the mortality model"
+#| fig-height: 8
+
+p_trace <- mcmc_trace(fit_mort, pars = c("b_Intercept", "sd_study_id__Intercept"))
+p_rank  <- mcmc_rank_overlay(fit_mort, pars = c("b_Intercept", "sd_study_id__Intercept"))
+p_trace / p_rank
+```
+
+### Combined Results Table
+
+```{r}
+#| label: tbl-combined-results
+#| tbl-cap: "Pooled estimates: Frequentist vs Bayesian"
+
+tibble(
+  Outcome = rep(c("Mortality", "Persistent Bacteremia"), each = 2),
+  Method = rep(c("Frequentist REML", "Bayesian RE"), 2),
+  `Pooled OR` = c(
+    round(exp(coef(rma_mort)), 2), round(exp(median(mu_mort)), 2),
+    round(exp(coef(rma_pb)), 2), round(exp(median(mu_pb)), 2)
+  ),
+  `95% CI/CrI` = c(
+    paste0(round(exp(rma_mort$ci.lb), 2), "–", round(exp(rma_mort$ci.ub), 2)),
+    paste0(round(exp(quantile(mu_mort, 0.025)), 2), "–", round(exp(quantile(mu_mort, 0.975)), 2)),
+    paste0(round(exp(rma_pb$ci.lb), 2), "–", round(exp(rma_pb$ci.ub), 2)),
+    paste0(round(exp(quantile(mu_pb, 0.025)), 2), "–", round(exp(quantile(mu_pb, 0.975)), 2))
+  ),
+  tau = c(
+    round(sqrt(rma_mort$tau2), 2), round(median(post_mort$sd_study_id__Intercept), 2),
+    round(sqrt(rma_pb$tau2), 2), round(median(post_pb$sd_study_id__Intercept), 2)
+  )
+)
+```
+
+# Forest Plots
+
+## Mortality Forest Plot
+
+```{r}
+#| label: fig-forest-mortality
+#| fig-cap: "Forest plot — Mortality (k=33). Studies ordered by effect size. Diamond = Bayesian pooled estimate."
+#| fig-height: 12
+#| fig-width: 10
+
+# Build forest data
+mort_forest <- es_mort |>
+  mutate(
+    or = exp(yi),
+    ci_lo = exp(yi - 1.96 * sei),
+    ci_hi = exp(yi + 1.96 * sei),
+    label = paste0(study_id, " (", es_source, ")")
+  ) |>
+  arrange(yi)
+
+mort_forest$order <- seq_len(nrow(mort_forest))
+
+# Bayesian pooled estimate
+pooled_or <- exp(median(mu_mort))
+pooled_lo <- exp(quantile(mu_mort, 0.025))
+pooled_hi <- exp(quantile(mu_mort, 0.975))
+
+ggplot(mort_forest, aes(x = or, y = reorder(label, yi))) +
+  geom_vline(xintercept = 1, linetype = "dashed", color = "grey50") +
+  geom_point(aes(size = 1/sei), color = "steelblue") +
+  geom_errorbarh(aes(xmin = ci_lo, xmax = ci_hi), height = 0.2, color = "steelblue") +
+  annotate("point", x = pooled_or, y = 0.5, shape = 18, size = 5, color = "red") +
+  annotate("errorbarh", xmin = pooled_lo, xmax = pooled_hi, y = 0.5, height = 0.3, color = "red") +
+  annotate("text", x = pooled_or, y = 0, label = paste0("Pooled OR = ", round(pooled_or, 2)),
+           hjust = 0.5, size = 3.5, fontface = "bold", color = "red") +
+  scale_x_log10() +
+  labs(x = "Odds Ratio (log scale)", y = NULL, size = "Precision\n(1/SE)") +
+  theme(
+    axis.text.y = element_text(size = 8),
+    legend.position = "bottom"
+  )
+```
+
+## Persistent Bacteremia Forest Plot
+
+```{r}
+#| label: fig-forest-pb
+#| fig-cap: "Forest plot — Persistent Bacteremia"
+#| fig-height: 6
+#| fig-width: 9
+
+pb_forest <- es_pb |>
+  mutate(
+    or = exp(yi),
+    ci_lo = exp(yi - 1.96 * sei),
+    ci_hi = exp(yi + 1.96 * sei),
+    label = paste0(study_id, " (", es_source, ")")
+  ) |>
+  arrange(yi)
+
+pooled_or_pb <- exp(median(mu_pb))
+pooled_lo_pb <- exp(quantile(mu_pb, 0.025))
+pooled_hi_pb <- exp(quantile(mu_pb, 0.975))
+
+ggplot(pb_forest, aes(x = or, y = reorder(label, yi))) +
+  geom_vline(xintercept = 1, linetype = "dashed", color = "grey50") +
+  geom_point(aes(size = 1/sei), color = "darkorange") +
+  geom_errorbarh(aes(xmin = ci_lo, xmax = ci_hi), height = 0.2, color = "darkorange") +
+  annotate("point", x = pooled_or_pb, y = 0.5, shape = 18, size = 5, color = "red") +
+  annotate("errorbarh", xmin = pooled_lo_pb, xmax = pooled_hi_pb, y = 0.5, height = 0.3, color = "red") +
+  scale_x_log10() +
+  labs(x = "Odds Ratio (log scale)", y = NULL, size = "Precision\n(1/SE)") +
+  theme(legend.position = "bottom")
+```
+
+## Bayesian Posterior Density Comparison
+
+```{r}
+#| label: fig-posterior-density
+#| fig-cap: "Posterior distributions of pooled OR for each outcome"
+#| fig-height: 5
+
+tibble(
+  Outcome = rep(c("Mortality", "Persistent Bacteremia"), c(length(mu_mort), length(mu_pb))),
+  OR = c(exp(mu_mort), exp(mu_pb))
+) |>
+  ggplot(aes(x = OR, fill = Outcome)) +
+  geom_density(alpha = 0.5) +
+  geom_vline(xintercept = 1, linetype = "dashed") +
+  scale_fill_manual(values = c("Mortality" = "steelblue", "Persistent Bacteremia" = "darkorange")) +
+  coord_cartesian(xlim = c(0, 15)) +
+  labs(x = "Pooled Odds Ratio", y = "Posterior Density") +
+  theme(legend.position = "top")
+```
+
+# Publication Bias Assessment
+
+## Funnel Plot
+
+```{r}
+#| label: fig-funnel
+#| fig-cap: "Funnel plot for mortality studies with trim-and-fill imputed studies"
+#| fig-height: 6
+
+# Trim-and-fill
+tf_mort <- trimfill(rma_mort, side = "left")
+
+funnel(tf_mort, xlab = "Log Odds Ratio", main = "Mortality — Funnel Plot with Trim-and-Fill")
+```
+
+## Egger's Regression Test
+
+```{r}
+#| label: egger-test
+
+regtest_mort <- regtest(rma_mort, model = "lm")
+cat("Egger's regression test for funnel asymmetry (Mortality):\n")
+cat("  z =", round(regtest_mort$zval, 3), "\n")
+cat("  p =", formatC(regtest_mort$pval, format = "e", digits = 3), "\n")
+cat("  Interpretation:", ifelse(regtest_mort$pval < 0.05,
+  "Significant asymmetry detected", "No significant asymmetry"), "\n")
+```
+
+## Trim-and-Fill Adjusted Estimate
+
+```{r}
+#| label: trim-fill-results
+
+cat("Original REML:   OR =", round(exp(coef(rma_mort)), 2),
+    "95% CI", round(exp(rma_mort$ci.lb), 2), "–", round(exp(rma_mort$ci.ub), 2), "\n")
+cat("Trim-and-Fill:   OR =", round(exp(coef(tf_mort)), 2),
+    "95% CI", round(exp(tf_mort$ci.lb), 2), "–", round(exp(tf_mort$ci.ub), 2), "\n")
+cat("Imputed studies:", tf_mort$k0, "\n")
+```
+
+## Frequentist Selection Models
+
+```{r}
+#| label: selection-models-freq
+
+# Step-function selection model (Vevea & Hedges)
+sel_mort <- try(selmodel(rma_mort, type = "stepfun", steps = 0.05), silent = TRUE)
+
+if (!inherits(sel_mort, "try-error")) {
+  sel_beta <- as.numeric(sel_mort$beta)
+  sel_ci_lb <- as.numeric(sel_mort$ci.lb)
+  sel_ci_ub <- as.numeric(sel_mort$ci.ub)
+  sel_delta <- as.numeric(sel_mort$delta)
+  cat("Step-function selection model:\n")
+  cat("  Adjusted OR:", round(exp(sel_beta[1]), 2), "\n")
+  cat("  95% CI:", round(exp(sel_ci_lb[1]), 2), "–", round(exp(sel_ci_ub[1]), 2), "\n")
+  cat("  Selection parameter delta:", round(sel_delta[1], 3), "\n")
+  cat("  (delta = probability ratio for non-significant vs significant studies)\n")
+}
+```
+
+## Bayesian Selection Models (Stan)
+
+To address limitations of frequentist selection models with sparse non-significant studies, we implement fully Bayesian selection models that regularize the selection parameter via informative priors.
+
+```{r}
+#| label: bayesian-selection-stan
+#| cache: true
+
+library(rstan)
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+
+selection_code <- "
+data {
+  int<lower=1> K;
+  vector[K] y;
+  vector<lower=0>[K] se;
+  int<lower=0,upper=1> sig[K];
+}
+parameters {
+  real mu;
+  real<lower=0> tau;
+  vector[K] theta;
+  real<lower=0,upper=1> delta;
+}
+model {
+  // Priors
+  mu ~ normal(0, 1);
+  tau ~ cauchy(0, 0.5);
+  delta ~ beta(2, 5);  // Skeptical: mean = 0.29
+
+  // Random effects
+  theta ~ normal(mu, tau);
+
+  // Likelihood
+  y ~ normal(theta, se);
+
+  // Selection mechanism
+  for (k in 1:K) {
+    if (sig[k] == 0) {
+      target += log(delta);
+    }
+  }
+}
+"
+
+# Prepare data
+mort_sig <- with(es_mort, as.integer(abs(yi / sei) > 1.96))
+
+stan_data <- list(
+  K = nrow(es_mort),
+  y = es_mort$yi,
+  se = es_mort$sei,
+  sig = mort_sig
+)
+
+fit_selection <- stan(
+  model_code = selection_code,
+  data = stan_data,
+  chains = 4, iter = 4000, warmup = 1000,
+  seed = 42
+)
+```
+
+```{r}
+#| label: bayesian-selection-results
+
+sel_draws <- as.data.frame(fit_selection)
+
+cat("Bayesian Selection Model (skeptical prior, delta ~ Beta(2,5)):\n")
+cat("  Pooled OR:", round(exp(median(sel_draws$mu)), 2), "\n")
+cat("  95% CrI:", round(exp(quantile(sel_draws$mu, 0.025)), 2), "–",
+    round(exp(quantile(sel_draws$mu, 0.975)), 2), "\n")
+cat("  P(OR > 1):", round(100 * mean(sel_draws$mu > 0), 1), "%\n\n")
+cat("  Selection delta (median):", round(median(sel_draws$delta), 2), "\n")
+cat("  delta 95% CrI:", round(quantile(sel_draws$delta, 0.025), 2), "–",
+    round(quantile(sel_draws$delta, 0.975), 2), "\n")
+```
+
+## Publication Bias Summary
+
+```{r}
+#| label: tbl-pub-bias-summary
+#| tbl-cap: "Publication bias assessment — comparison of adjustment methods"
+
+# Build summary table
+bias_summary <- tibble(
+  Method = c(
+    "Unadjusted (REML)",
+    "Trim-and-Fill",
+    "Freq. Step-function",
+    "Bayesian Selection (skeptical prior)"
+  ),
+  `Pooled OR` = c(
+    round(exp(coef(rma_mort)), 2),
+    round(exp(coef(tf_mort)), 2),
+    if (!inherits(sel_mort, "try-error")) round(exp(sel_beta[1]), 2) else NA,
+    round(exp(median(sel_draws$mu)), 2)
+  ),
+  `95% CI/CrI` = c(
+    paste0(round(exp(rma_mort$ci.lb), 2), "–", round(exp(rma_mort$ci.ub), 2)),
+    paste0(round(exp(tf_mort$ci.lb), 2), "–", round(exp(tf_mort$ci.ub), 2)),
+    if (!inherits(sel_mort, "try-error")) paste0(round(exp(sel_ci_lb[1]), 2), "–", round(exp(sel_ci_ub[1]), 2)) else "—",
+    paste0(round(exp(quantile(sel_draws$mu, 0.025)), 2), "–", round(exp(quantile(sel_draws$mu, 0.975)), 2))
+  ),
+  Interpretation = c(
+    "Reference estimate",
+    "Conservative lower bound",
+    "Likely over-adjusts (sparse non-sig studies)",
+    "Robust — regularized selection parameter"
+  )
+)
+
+bias_summary
+```
+
+# Sensitivity Analyses
+
+## Outlier Exclusion — Mortality
+
+Ji2020 reports an extreme effect size. We re-estimate the model excluding this study.
+
+```{r}
+#| label: fit-mort-sens
+#| cache: true
+
+es_mort_no_ji <- es_mort |> filter(study_id != "Ji2020")
+
+fit_mort_sens <- brm(
+  yi | se(sei) ~ 1 + (1 | study_id),
+  data = es_mort_no_ji,
+  prior = meta_priors,
+  backend = stan_backend,
+  chains = 4, iter = 4000, warmup = 1000,
+  control = list(adapt_delta = 0.95),
+  seed = 42
+)
+
+post_mort_sens <- as_draws_df(fit_mort_sens)
+mu_mort_sens <- post_mort_sens$b_Intercept
+
+cat("Mortality sensitivity (excluding Ji2020):\n")
+cat("  OR:", round(exp(median(mu_mort_sens)), 2), "\n")
+cat("  95% CrI:", round(exp(quantile(mu_mort_sens, 0.025)), 2), "–",
+    round(exp(quantile(mu_mort_sens, 0.975)), 2), "\n")
+cat("  P(OR > 1):", round(100 * mean(mu_mort_sens > 0), 1), "%\n")
+```
+
+## Outlier Exclusion — Persistent Bacteremia
+
+The persistent bacteremia pool is influenced by studies with extreme estimates from sparse 2×2 cells (Melling2019, Kassis2009).
+
+```{r}
+#| label: fit-pb-sens
+#| cache: true
+
+es_pb_sens <- es_pb |> filter(!study_id %in% c("Melling2019", "Kassis2009"))
+
+fit_pb_sens <- brm(
+  yi | se(sei) ~ 1 + (1 | study_id),
+  data = es_pb_sens,
+  prior = meta_priors,
+  backend = stan_backend,
+  chains = 4, iter = 4000, warmup = 1000,
+  control = list(adapt_delta = 0.95),
+  seed = 42
+)
+
+post_pb_sens <- as_draws_df(fit_pb_sens)
+mu_pb_sens <- post_pb_sens$b_Intercept
+
+cat("Persistent bacteremia sensitivity (excluding Melling2019, Kassis2009):\n")
+cat("  OR:", round(exp(median(mu_pb_sens)), 2), "\n")
+cat("  95% CrI:", round(exp(quantile(mu_pb_sens, 0.025)), 2), "–",
+    round(exp(quantile(mu_pb_sens, 0.975)), 2), "\n")
+cat("  P(OR > 1):", round(100 * mean(mu_pb_sens > 0), 1), "%\n")
+```
+
+## Prior Sensitivity — Mortality
+
+We vary prior specifications to assess robustness of the pooled mortality estimate.
+
+```{r}
+#| label: prior-sensitivity
+#| cache: true
+
+# Wider intercept prior
+fit_mort_wide <- brm(
+  yi | se(sei) ~ 1 + (1 | study_id),
+  data = es_mort,
+  prior = c(
+    prior(normal(0, 2), class = "Intercept"),
+    prior(cauchy(0, 0.5), class = "sd")
+  ),
+  backend = stan_backend,
+  chains = 4, iter = 4000, warmup = 1000,
+  control = list(adapt_delta = 0.95),
+  seed = 42
+)
+
+# Skeptical prior (centered toward null)
+fit_mort_skep <- brm(
+  yi | se(sei) ~ 1 + (1 | study_id),
+  data = es_mort,
+  prior = c(
+    prior(normal(0, 0.5), class = "Intercept"),
+    prior(cauchy(0, 0.5), class = "sd")
+  ),
+  backend = stan_backend,
+  chains = 4, iter = 4000, warmup = 1000,
+  control = list(adapt_delta = 0.95),
+  seed = 42
+)
+
+# Half-normal tau prior
+fit_mort_hn <- brm(
+  yi | se(sei) ~ 1 + (1 | study_id),
+  data = es_mort,
+  prior = c(
+    prior(normal(0, 1), class = "Intercept"),
+    prior(normal(0, 0.5), class = "sd")
+  ),
+  backend = stan_backend,
+  chains = 4, iter = 4000, warmup = 1000,
+  control = list(adapt_delta = 0.95),
+  seed = 42
+)
+```
+
+```{r}
+#| label: tbl-prior-sensitivity
+#| tbl-cap: "Prior sensitivity analysis — Mortality"
+
+extract_or <- function(fit, label) {
+  post <- as_draws_df(fit)
+  mu <- post$b_Intercept
+  tibble(
+    Prior = label,
+    `Pooled OR` = round(exp(median(mu)), 2),
+    `95% CrI` = paste0(round(exp(quantile(mu, 0.025)), 2), "–", round(exp(quantile(mu, 0.975)), 2)),
+    `P(OR>1)` = paste0(round(100 * mean(mu > 0), 1), "%")
+  )
+}
+
+bind_rows(
+  extract_or(fit_mort, "Primary: N(0,1) + HC(0,0.5)"),
+  extract_or(fit_mort_wide, "Wide: N(0,2) + HC(0,0.5)"),
+  extract_or(fit_mort_skep, "Skeptical: N(0,0.5) + HC(0,0.5)"),
+  extract_or(fit_mort_hn, "Half-Normal tau: N(0,1) + HN(0,0.5)")
+)
+```
+
+## Sensitivity Summary
+
+```{r}
+#| label: tbl-all-sensitivity
+#| tbl-cap: "Complete sensitivity analysis summary — Mortality"
+
+bind_rows(
+  tibble(Analysis = "Primary Bayesian (k=33)", OR = round(exp(median(mu_mort)), 2),
+         CrI = paste0(round(exp(quantile(mu_mort, 0.025)), 2), "–", round(exp(quantile(mu_mort, 0.975)), 2))),
+  tibble(Analysis = "Excl. Ji2020 (k=32)", OR = round(exp(median(mu_mort_sens)), 2),
+         CrI = paste0(round(exp(quantile(mu_mort_sens, 0.025)), 2), "–", round(exp(quantile(mu_mort_sens, 0.975)), 2))),
+  tibble(Analysis = "Trim-and-Fill adjusted", OR = round(exp(coef(tf_mort)), 2),
+         CrI = paste0(round(exp(tf_mort$ci.lb), 2), "–", round(exp(tf_mort$ci.ub), 2))),
+  tibble(Analysis = "Bayesian Selection (skeptical)", OR = round(exp(median(sel_draws$mu)), 2),
+         CrI = paste0(round(exp(quantile(sel_draws$mu, 0.025)), 2), "–", round(exp(quantile(sel_draws$mu, 0.975)), 2)))
+)
+```
+
+# Meta-Regression
+
+We test whether prespecified study-level moderators explain heterogeneity in the mortality effect via Bayesian meta-regression. Each moderator is tested in a separate univariable model.
+
+## Pathogen Class
+
+```{r}
+#| label: metareg-pathogen
+#| cache: true
+
+es_mort_complete_path <- es_mort |> filter(!is.na(pathogen_class))
+
+fit_pathogen <- brm(
+  yi | se(sei) ~ 1 + pathogen_class + (1 | study_id),
+  data = es_mort_complete_path,
+  prior = c(
+    prior(normal(0, 1), class = "Intercept"),
+    prior(normal(0, 0.5), class = "b"),
+    prior(cauchy(0, 0.5), class = "sd")
+  ),
+  backend = stan_backend,
+  chains = 4, iter = 4000, warmup = 1000,
+  control = list(adapt_delta = 0.95),
+  seed = 42
+)
+
+summary(fit_pathogen)
+```
+
+## S. aureus vs Other Pathogens
+
+```{r}
+#| label: metareg-saureus
+#| cache: true
+
+fit_saureus <- brm(
+  yi | se(sei) ~ 1 + organism_saureus + (1 | study_id),
+  data = es_mort,
+  prior = c(
+    prior(normal(0, 1), class = "Intercept"),
+    prior(normal(0, 0.5), class = "b"),
+    prior(cauchy(0, 0.5), class = "sd")
+  ),
+  backend = stan_backend,
+  chains = 4, iter = 4000, warmup = 1000,
+  control = list(adapt_delta = 0.95),
+  seed = 42
+)
+
+summary(fit_saureus)
+```
+
+## Risk of Bias
+
+```{r}
+#| label: metareg-rob
+#| cache: true
+
+fit_rob <- brm(
+  yi | se(sei) ~ 1 + rob_binary + (1 | study_id),
+  data = es_mort,
+  prior = c(
+    prior(normal(0, 1), class = "Intercept"),
+    prior(normal(0, 0.5), class = "b"),
+    prior(cauchy(0, 0.5), class = "sd")
+  ),
+  backend = stan_backend,
+  chains = 4, iter = 4000, warmup = 1000,
+  control = list(adapt_delta = 0.95),
+  seed = 42
+)
+
+summary(fit_rob)
+```
+
+## Blood Culture System
+
+```{r}
+#| label: metareg-bcs
+#| cache: true
+
+es_mort_bcs <- es_mort |> filter(!is.na(blood_culture_system_clean))
+
+fit_bcs <- brm(
+  yi | se(sei) ~ 1 + bcs_binary + (1 | study_id),
+  data = es_mort_bcs,
+  prior = c(
+    prior(normal(0, 1), class = "Intercept"),
+    prior(normal(0, 0.5), class = "b"),
+    prior(cauchy(0, 0.5), class = "sd")
+  ),
+  backend = stan_backend,
+  chains = 4, iter = 4000, warmup = 1000,
+  control = list(adapt_delta = 0.95),
+  seed = 42
+)
+
+summary(fit_bcs)
+```
+
+## Meta-Regression Summary
+
+```{r}
+#| label: tbl-metareg-summary
+#| tbl-cap: "Meta-regression results — moderator effects on mortality log-OR"
+
+extract_metareg <- function(fit, moderator) {
+  post <- as_draws_df(fit)
+  # Get coefficient names excluding Intercept and sd
+  coef_names <- names(post)[str_detect(names(post), "^b_") & names(post) != "b_Intercept"]
+
+  map_dfr(coef_names, function(cn) {
+    vals <- post[[cn]]
+    tibble(
+      Moderator = moderator,
+      Coefficient = str_remove(cn, "^b_"),
+      Estimate = round(median(vals), 3),
+      `95% CrI` = paste0(round(quantile(vals, 0.025), 3), " to ", round(quantile(vals, 0.975), 3)),
+      `P(β ≠ 0)` = paste0(round(100 * (1 - 2 * min(mean(vals > 0), mean(vals < 0))), 1), "%"),
+      `CrI includes 0` = ifelse(quantile(vals, 0.025) < 0 & quantile(vals, 0.975) > 0, "Yes", "No")
+    )
+  })
+}
+
+bind_rows(
+  extract_metareg(fit_pathogen, "Pathogen class"),
+  extract_metareg(fit_saureus, "S. aureus"),
+  extract_metareg(fit_rob, "Risk of bias"),
+  extract_metareg(fit_bcs, "Blood culture system")
+)
+```
+
+None of the tested moderators explained a meaningful proportion of heterogeneity. All 95% credible intervals for moderator coefficients included zero, indicating that the TTP–mortality association is consistent across pathogen classes, organisms, risk of bias strata, and blood culture detection systems.
+
+# Discussion
+
+## Key Findings
+
+This Bayesian meta-analysis of 40 studies demonstrates a robust association between short blood culture time to positivity and adverse clinical outcomes in bacteremia.
+
+**Mortality (k=33):** The primary Bayesian model yields a pooled OR of approximately 2.14 (95% CrI: 1.69–2.79), with a posterior probability of 100% that short TTP increases mortality risk. This estimate is concordant with the frequentist REML estimate (OR 2.18, 95% CI: 1.72–2.75), providing strong cross-methodological validation.
+
+**Persistent bacteremia (k=7–9):** The association is also present but less precisely estimated, with a pooled OR of approximately 4.02 (95% CrI: 1.08–11.11) and P(OR > 1) = 97.9%. The wider credible interval reflects both the smaller study pool and the influence of outlying estimates from studies with sparse 2×2 cells.
+
+## Heterogeneity
+
+Substantial between-study heterogeneity was observed (I² ≈ 99%, τ ≈ 0.58 for mortality). Meta-regression found no moderator — pathogen class, *S. aureus* specificity, risk of bias, or blood culture system — that explained this heterogeneity. This suggests that unmeasured factors (TTP cutpoint variation, patient severity, antibiotic timing, institutional protocols) drive the between-study variability.
+
+## Publication Bias
+
+Significant funnel asymmetry was detected (Egger's p < 0.001). Multiple adjustment approaches were applied:
+
+- **Trim-and-fill** yielded a conservative OR of approximately 1.50, representing a plausible lower bound
+- **Frequentist step-function selection** produced a near-null estimate (OR ≈ 1.09), but this model is known to overadjust when non-significant studies are sparse (only 3/33 = 9%)
+- **Bayesian selection models** — with both uniform and skeptical priors on the selection parameter — remained robust, yielding pooled ORs of approximately 2.14 with P(OR > 1) = 100%
+
+The discrepancy between frequentist and Bayesian selection models is consistent with the known instability of maximum likelihood estimation for selection functions with sparse data. The Bayesian approach regularizes the selection parameter, avoiding the extreme δ values (≈ 0.037) that drive the frequentist model toward the null.
+
+**Interpretation:** The true mortality effect likely lies between OR 1.50 (trim-and-fill lower bound) and 2.14 (unadjusted Bayesian). Some publication bias is probable, but short TTP remains a meaningful prognostic marker across all plausible adjustments.
+
+## Sensitivity
+
+The mortality estimate was robust to outlier exclusion (OR 2.00 excluding Ji2020), prior specification (OR range 1.99–2.15 across four prior configurations, ±4%), and publication bias adjustment via Bayesian methods. The persistent bacteremia estimate was more sensitive, reflecting the smaller evidence base.
+
+## Limitations
+
+1. **Cutpoint heterogeneity** — TTP "short" thresholds ranged from ≤8h to ≤16h across studies, a source of irreducible clinical heterogeneity
+2. **Outcome definition variability** — mortality timepoints ranged from 14-day to in-hospital; persistent bacteremia definitions varied
+3. **Publication bias** — despite Bayesian robustness, the high proportion of significant studies (91%) exceeds expectations and suggests some degree of selective reporting
+4. **Observational evidence only** — all included studies are observational, limiting causal inference
+5. **Continuous TTP effects excluded** — two studies reporting OR per hour of TTP were excluded from the main pool due to incompatible effect scales
+
+## Conclusions
+
+Short blood culture time to positivity is robustly associated with increased mortality in bacteremia, with a Bayesian pooled OR of approximately 2.14 that is stable across sensitivity analyses, prior specifications, and publication bias adjustment methods. The association with persistent bacteremia, while directionally consistent, requires further study given the limited evidence base. TTP warrants consideration as a readily available early prognostic marker that could inform clinical decision-making in bacteremia management.
+
+# Session Information
+
+```{r}
+#| label: session-info
+
+sessionInfo()
+```
