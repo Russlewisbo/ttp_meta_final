@@ -1,0 +1,281 @@
+---
+title: "Forest Plots"
+---
+
+## Visual Summary of Meta-Analysis Results
+
+This page presents forest plots visualizing the effect sizes from individual studies and pooled estimates for each outcome.
+
+```{r setup}
+#| include: false
+library(tidyverse)
+library(readxl)
+library(metafor)
+library(brms)
+library(knitr)
+
+# Set working directory to project root
+knitr::opts_knit$set(root.dir = here::here())
+```
+
+```{r load-data}
+#| include: false
+#| cache: true
+
+# Load data
+tbl_study <- read_excel("TTP_MetaAnalysis_Extraction_Complete.xlsx", sheet = "tbl_study")
+tbl_population <- read_excel("TTP_MetaAnalysis_Extraction_Complete.xlsx", sheet = "tbl_population")
+tbl_outcomes <- read_excel("TTP_MetaAnalysis_Extraction_Complete.xlsx", sheet = "tbl_outcomes")
+
+# Clean and prepare mortality data
+outcomes_clean <- tbl_outcomes |>
+  filter(outcome_type == "mortality") |>
+  filter(!is.na(n_ttp_short_outcome_yes) | !is.na(or_reported))
+
+# Calculate effect sizes
+es_mort <- escalc(
+  measure = "OR",
+  ai = n_ttp_short_outcome_yes,
+  bi = n_ttp_short_outcome_no,
+  ci = n_ttp_long_outcome_yes,
+  di = n_ttp_long_outcome_no,
+  data = outcomes_clean,
+  slab = study_id
+)
+
+# Fit models
+rma_mort <- rma(yi, vi, data = es_mort |> filter(!is.na(yi)), method = "REML")
+```
+
+## Mortality Outcome
+
+### Standard Forest Plot
+
+```{r fig-forest-mortality}
+#| fig-width: 10
+#| fig-height: 12
+#| fig-cap: "Forest plot of mortality outcomes. Each row represents a single study with the point estimate (square) and 95% confidence interval (horizontal line). The size of the square is proportional to the study weight. The diamond at the bottom represents the pooled random-effects estimate."
+
+# Create forest plot
+forest(rma_mort,
+       slab = es_mort$study_id[!is.na(es_mort$yi)],
+       atransf = exp,
+       xlab = "Odds Ratio (log scale)",
+       header = c("Study", "OR [95% CI]"),
+       cex = 0.8,
+       xlim = c(-6, 8),
+       at = log(c(0.1, 0.25, 0.5, 1, 2, 4, 8, 16)),
+       refline = 0,
+       ilab.xpos = -4,
+       fonts = "sans")
+
+# Add text
+text(-6, -1, "Favors Longer TTP", pos = 4, cex = 0.8, font = 3)
+text(8, -1, "Favors Shorter TTP", pos = 2, cex = 0.8, font = 3)
+```
+
+The forest plot above shows:
+
+- **Individual study estimates**: Each study's odds ratio and 95% confidence interval
+- **Study weights**: Larger squares indicate studies with greater precision (smaller standard errors) that contribute more to the pooled estimate
+- **Pooled estimate**: The diamond at the bottom represents the random-effects meta-analytic estimate
+- **Reference line**: The vertical dashed line at OR = 1 indicates no association
+
+::: {.callout-note}
+## Interpretation
+
+Most studies fall to the **right of the null line** (OR = 1), indicating that shorter TTP is consistently associated with increased mortality across diverse populations and settings. The pooled estimate (diamond) clearly excludes 1.0, confirming a significant association.
+:::
+
+### Subgroup Analysis by Pathogen Class
+
+```{r pathogen-data}
+#| include: false
+#| cache: true
+
+# Prepare pathogen-stratified data
+es_mort_merged <- es_mort |>
+  left_join(tbl_population, by = "study_id") |>
+  filter(!is.na(yi)) |>
+  filter(pathogen_class %in% c("gram_positive", "gram_negative"))
+
+# Split by pathogen
+es_mort_gp <- es_mort_merged |> filter(pathogen_class == "gram_positive")
+es_mort_gn <- es_mort_merged |> filter(pathogen_class == "gram_negative")
+
+# Fit separate models
+rma_gp <- rma(yi, vi, data = es_mort_gp, method = "REML")
+rma_gn <- rma(yi, vi, data = es_mort_gn, method = "REML")
+```
+
+```{r fig-forest-pathogen}
+#| fig-width: 10
+#| fig-height: 14
+#| fig-cap: "Forest plot stratified by pathogen class showing separate pooled estimates for Gram-positive and Gram-negative infections."
+
+# Set up plotting area
+par(mfrow = c(2, 1), mar = c(4, 4, 3, 2))
+
+# Gram-positive forest plot
+forest(rma_gp,
+       slab = es_mort_gp$study_id,
+       atransf = exp,
+       xlab = "Odds Ratio",
+       main = "Gram-Positive Infections",
+       header = c("Study", "OR [95% CI]"),
+       cex = 0.8,
+       xlim = c(-4, 6),
+       at = log(c(0.25, 0.5, 1, 2, 4, 8)),
+       refline = 0)
+
+# Gram-negative forest plot
+forest(rma_gn,
+       slab = es_mort_gn$study_id,
+       atransf = exp,
+       xlab = "Odds Ratio",
+       main = "Gram-Negative Infections",
+       header = c("Study", "OR [95% CI]"),
+       cex = 0.8,
+       xlim = c(-4, 6),
+       at = log(c(0.25, 0.5, 1, 2, 4, 8)),
+       refline = 0)
+
+par(mfrow = c(1, 1))
+```
+
+**Key Observations:**
+
+- Both pathogen classes show consistent positive associations between shorter TTP and mortality
+- Pooled estimates are remarkably similar (Gram-positive OR = `r sprintf("%.2f", exp(coef(rma_gp)))`, Gram-negative OR = `r sprintf("%.2f", exp(coef(rma_gn)))`)
+- The similarity supports the conclusion that TTP is a **pathogen-agnostic prognostic marker**
+
+## Persistent Bacteremia Outcome
+
+```{r pb-data}
+#| include: false
+#| cache: true
+
+# Prepare persistent bacteremia data
+pb_clean <- tbl_outcomes |>
+  filter(outcome_type == "persistent_bacteremia") |>
+  filter(!is.na(n_ttp_short_outcome_yes))
+
+es_pb <- escalc(
+  measure = "OR",
+  ai = n_ttp_short_outcome_yes,
+  bi = n_ttp_short_outcome_no,
+  ci = n_ttp_long_outcome_yes,
+  di = n_ttp_long_outcome_no,
+  data = pb_clean,
+  slab = study_id
+)
+
+rma_pb <- rma(yi, vi, data = es_pb |> filter(!is.na(yi)), method = "REML")
+```
+
+```{r fig-forest-pb}
+#| fig-width: 10
+#| fig-height: 8
+#| fig-cap: "Forest plot of persistent bacteremia outcomes showing the association between TTP and microbiological failure."
+
+# Create forest plot
+forest(rma_pb,
+       slab = es_pb$study_id[!is.na(es_pb$yi)],
+       atransf = exp,
+       xlab = "Odds Ratio (log scale)",
+       header = c("Study", "OR [95% CI]"),
+       cex = 0.8,
+       xlim = c(-4, 10),
+       at = log(c(0.1, 0.5, 1, 5, 10, 50, 100)),
+       refline = 0)
+
+text(-4, -1, "Favors Longer TTP", pos = 4, cex = 0.8, font = 3)
+text(10, -1, "Favors Shorter TTP", pos = 2, cex = 0.8, font = 3)
+```
+
+::: {.callout-important}
+## Notable Finding
+
+The association between TTP and persistent bacteremia is **even stronger** than for mortality (pooled OR = `r sprintf("%.2f", exp(coef(rma_pb)))`), though based on fewer studies (k = `r rma_pb$k`).
+
+Some studies show very large effect sizes (e.g., OR > 30), suggesting that in certain contexts, shorter TTP is a powerful predictor of microbiological failure.
+:::
+
+## Funnel Plot for Publication Bias
+
+```{r fig-funnel}
+#| fig-width: 8
+#| fig-height: 8
+#| fig-cap: "Funnel plot for mortality studies. Asymmetry suggests potential publication bias or small-study effects."
+
+# Create funnel plot
+funnel(rma_mort, 
+       atransf = exp,
+       xlab = "Odds Ratio",
+       main = "Funnel Plot - Mortality Outcome",
+       back = "white",
+       shade = "white",
+       hlines = "gray")
+
+# Add trim-and-fill points if applicable
+taf <- trimfill(rma_mort)
+if (taf$k0 > 0) {
+  points(exp(taf$yi), 1/sqrt(taf$vi), pch = 19, col = "red", cex = 0.8)
+  legend("topright", 
+         legend = c("Observed studies", "Imputed studies (trim-and-fill)"),
+         pch = 19,
+         col = c("black", "red"),
+         cex = 0.8)
+}
+```
+
+The funnel plot shows **asymmetry** with a deficit of small studies showing null or protective effects. This pattern suggests:
+
+1. **Possible publication bias**: Studies with null findings may be underrepresented
+2. **Small-study effects**: Smaller studies tend to report larger effect sizes
+3. **Genuine heterogeneity**: Different study populations or methods
+
+See the [Publication Bias](publication_bias.qmd) page for detailed sensitivity analyses addressing these concerns.
+
+## Effect Size Distribution
+
+```{r fig-distribution}
+#| fig-width: 8
+#| fig-height: 6
+#| fig-cap: "Distribution of observed effect sizes across mortality studies."
+
+# Create histogram
+es_mort |>
+  filter(!is.na(yi)) |>
+  ggplot(aes(x = exp(yi))) +
+  geom_histogram(bins = 15, fill = "steelblue", color = "white", alpha = 0.8) +
+  geom_vline(xintercept = 1, linetype = "dashed", color = "red", linewidth = 1) +
+  geom_vline(xintercept = exp(coef(rma_mort)), linetype = "solid", color = "darkblue", linewidth = 1) +
+  scale_x_log10(breaks = c(0.5, 1, 2, 4, 8, 16)) +
+  labs(
+    title = "Distribution of Observed Odds Ratios",
+    x = "Odds Ratio (log scale)",
+    y = "Number of Studies",
+    caption = "Red dashed line: OR = 1 (null effect)\nBlue solid line: Pooled estimate"
+  ) +
+  theme_minimal(base_size = 12)
+```
+
+The distribution shows:
+
+- Most studies report OR > 1 (harmful effect of shorter TTP)
+- Effect sizes range from approximately 0.5 to 16
+- The majority cluster between OR = 1.5 and 4.0
+- Very few studies show protective effects (OR < 1)
+
+## Summary
+
+These forest plots demonstrate:
+
+1. **Consistent directionality**: The vast majority of studies show shorter TTP associated with worse outcomes
+2. **Statistical significance**: The pooled estimates clearly exclude the null value
+3. **Pathogen-agnostic effect**: Similar associations across Gram-positive and Gram-negative infections
+4. **Stronger effect for persistent bacteremia**: Suggesting TTP predicts both clinical and microbiological outcomes
+5. **Potential publication bias**: Asymmetric funnel plot warrants sensitivity analyses
+
+For more details on heterogeneity and moderator analyses, see [Meta-Regression](meta_regression.qmd).

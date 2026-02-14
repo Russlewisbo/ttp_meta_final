@@ -1,0 +1,303 @@
+---
+title: "Methods"
+---
+
+## Study Selection and Data Extraction
+
+### Inclusion Criteria
+
+Studies were included if they:
+
+1. Examined patients with bloodstream infection/bacteremia
+2. Measured blood culture time to positivity (TTP)
+3. Reported clinical outcomes (mortality or persistent bacteremia)
+4. Provided sufficient data for effect size computation
+
+### Data Sources
+
+**Primary Database:** `TTP_MetaAnalysis_Extraction_Complete.xlsx`
+
+The extraction database contains four relational tables:
+
+```{r}
+#| label: setup
+#| echo: false
+
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(gt)
+library(knitr)
+
+path <- "/Users/russelllewis/Desktop/ttp_meta_final/TTP_MetaAnalysis_Extraction_Complete.xlsx"
+```
+
+```{r}
+#| label: database-structure
+#| echo: false
+
+tibble(
+  Table = c("`tbl_study`", "`tbl_population`", "`tbl_ttp`", "`tbl_outcomes`"),
+  Description = c(
+    "Study metadata (author, year, design, risk of bias)",
+    "Population characteristics (pathogen, source, severity)",
+    "TTP measurement details (cutpoints, blood culture system)",
+    "Outcome data (2×2 tables, effect estimates)"
+  ),
+  Rows = c(57, 57, 57, 88),
+  Key = c("`study_id`", "`study_id`", "`study_id`", "`study_id`, `arm_id`")
+) |>
+  gt() |>
+  tab_header(title = "Database Architecture") |>
+  cols_align(align = "left") |>
+  tab_options(table.width = pct(100))
+```
+
+## Effect Size Computation
+
+### Hierarchy of Effect Estimates
+
+Effect sizes were computed following this priority hierarchy:
+
+1. **Reported adjusted estimates** (OR/HR/RR with CI) — **preferred**
+2. **Reported unadjusted estimates** (OR/HR/RR with CI)
+3. **Computed from 2×2 tables** using `metafor::escalc()`
+4. **Continuous TTP effects** (OR per hour) — analyzed separately
+
+### Standardization to Log-Odds Ratios
+
+All effect estimates were converted to log-odds ratios (log-OR) with sampling variances:
+
+**From 2×2 tables:**
+```{r}
+#| eval: false
+#| code-fold: false
+
+escalc(
+  measure = "OR",
+  ai = events_short_ttp,
+  bi = n_short_ttp - events_short_ttp,
+  ci = events_long_ttp,
+  di = n_long_ttp - events_long_ttp
+)
+```
+
+**From reported OR/HR/RR with 95% CI:**
+```{r}
+#| eval: false
+#| code-fold: false
+
+yi = log(effect_estimate)
+sei = (log(ci_upper) - log(ci_lower)) / (2 * 1.96)
+vi = sei^2
+```
+
+### Deduplication Rules
+
+When multiple effect estimates were available from the same study:
+
+- **Prefer adjusted over unadjusted** (Cilloniz2017, Hou2023)
+- **Remove extreme sparse-cell estimates** (Melling2019 OR = 1722)
+- **Keep legitimate subgroups** (Marco2025 — two distinct populations)
+
+## Statistical Analysis
+
+### Primary Model: Bayesian Random-Effects
+
+We fit Bayesian hierarchical models using `brms`:
+
+```{r}
+#| eval: false
+#| code-fold: false
+
+brm(
+  yi | se(sei) ~ 1 + (1 | study_id),
+  data = es_data,
+  prior = c(
+    prior(normal(0, 1), class = "Intercept"),
+    prior(cauchy(0, 0.5), class = "sd")
+  ),
+  backend = "cmdstanr",
+  chains = 4, 
+  iter = 4000, 
+  warmup = 1000,
+  control = list(adapt_delta = 0.95)
+)
+```
+
+### Prior Specification Rationale
+
+::: {.callout-note}
+### Weakly Informative Priors
+
+**Intercept:** `Normal(0, 1)`  
+- On log-OR scale
+- 95% prior mass: OR ∈ [0.14, 7.4]
+- Compatible with wide range of clinically plausible effects
+
+**Between-study SD (τ):** `Half-Cauchy(0, 0.5)`  
+- Allows moderate to substantial heterogeneity
+- Regularizes extreme values
+- Recommended by Gelman (2006) for hierarchical models
+:::
+
+### Validation: Frequentist REML
+
+Frequentist random-effects models via `metafor` provided convergence validation:
+
+```{r}
+#| eval: false
+#| code-fold: false
+
+rma(yi = yi, vi = vi, data = es_data, method = "REML")
+```
+
+### Meta-Regression
+
+Univariable meta-regressions tested prespecified moderators:
+
+```{r}
+#| eval: false
+#| code-fold: false
+
+brm(
+  yi | se(sei) ~ 1 + moderator + (1 | study_id),
+  prior = c(
+    prior(normal(0, 1), class = "Intercept"),
+    prior(normal(0, 0.5), class = "b"),  # moderator effects
+    prior(cauchy(0, 0.5), class = "sd")
+  ),
+  ...
+)
+```
+
+**Moderators examined:**
+
+- Pathogen class (Gram-positive vs Gram-negative)
+- *Staphylococcus aureus* vs other organisms
+- Risk of bias (low vs moderate/high)
+- Blood culture system (BACTEC vs BacTALERT vs other)
+- TTP cutpoint (continuous, where available)
+
+## Publication Bias Assessment
+
+### Graphical Methods
+
+1. **Funnel plot** — scatter plot of effect size vs standard error
+2. **Trim-and-fill** — imputation of missing studies (Duval & Tweedie, 2000)
+
+### Statistical Tests
+
+1. **Egger's regression test** — test for funnel asymmetry
+2. **Selection models** — adjust for selective publication
+
+### Bayesian Selection Model
+
+To address limitations of frequentist selection models with sparse non-significant studies, we implemented a fully Bayesian step-function selection model in Stan:
+
+```{stan}
+#| eval: false
+#| output: asis
+#| code-fold: false
+
+model {
+  // Priors
+  mu ~ normal(0, 1);
+  tau ~ cauchy(0, 0.5);
+  delta ~ beta(2, 5);  // selection parameter (skeptical prior)
+  
+  // Random effects
+  theta ~ normal(mu, tau);
+  
+  // Likelihood
+  y ~ normal(theta, se);
+  
+  // Selection mechanism
+  for (k in 1:K) {
+    if (sig[k] == 0) {  // non-significant study
+      target += log(delta);  // downweight by delta
+    }
+  }
+}
+```
+
+The selection parameter δ represents the relative probability of observing a non-significant vs significant study. The Beta(2, 5) prior is skeptical, centering δ around 0.29.
+
+## Sensitivity Analyses
+
+### Outlier Exclusion
+
+Studies with extreme effect sizes were identified and excluded:
+
+- **Mortality:** Ji2020 (OR = 40.45)
+- **Persistent bacteremia:** Melling2019 (OR = 37), Kassis2009 (OR = 75)
+
+### Prior Sensitivity
+
+We tested four prior specifications for the mortality analysis:
+
+1. **Primary:** Normal(0, 1) + Half-Cauchy(0, 0.5)
+2. **Wide:** Normal(0, 2) + Half-Cauchy(0, 0.5)
+3. **Skeptical:** Normal(0, 0.5) + Half-Cauchy(0, 0.5)
+4. **Half-Normal τ:** Normal(0, 1) + Half-Normal(0, 0.5)
+
+## Risk of Bias Assessment
+
+Studies were assessed using adapted Newcastle-Ottawa Scale criteria across six domains:
+
+1. **Selection** — representativeness, consecutive enrollment
+2. **Comparability** — control for confounding
+3. **Outcome** — assessment method, blinding
+4. **Statistical Analysis** — appropriate methods, adjustment
+5. **Attrition** — completeness of follow-up
+6. **Prognostic Measurement** — TTP measurement validity
+
+Each domain rated as: **Low**, **Moderate**, or **High** risk.
+
+Overall risk of bias: **Low**, **Moderate**, **High**, or **Critical**
+
+## Software and Packages
+
+All analyses conducted in R 4.5+ with:
+
+```{r}
+#| eval: false
+#| code-fold: false
+
+# Core packages
+library(tidyverse)    # Data manipulation
+library(readxl)       # Excel import
+library(metafor)      # Frequentist meta-analysis
+library(brms)         # Bayesian meta-analysis
+library(rstan)        # Custom Stan models
+
+# Visualization
+library(ggplot2)
+library(patchwork)
+library(bayesplot)
+
+# Diagnostics
+library(posterior)
+library(ggdist)
+```
+
+**Computational Environment:**
+
+- R version: 4.5.1
+- Stan backend: CmdStanR (preferred) or RStan
+- Parallel chains: 4
+- MCMC iterations: 4000 (1000 warmup)
+
+## Reporting Standards
+
+This meta-analysis follows:
+
+- **PRISMA 2020** (Preferred Reporting Items for Systematic Reviews and Meta-Analyses)
+- **MOOSE** (Meta-analysis Of Observational Studies in Epidemiology)
+
+---
+
+**References:**
+
+- Gelman A. Prior distributions for variance parameters in hierarchical models. *Bayesian Anal.* 2006;1(3):515-534.
+- Duval S, Tweedie R. Trim and fill: A simple funnel-plot-based method. *Biometrics.* 2000;56(2):455-463.

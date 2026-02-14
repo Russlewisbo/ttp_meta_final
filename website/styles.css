@@ -1,0 +1,44 @@
+/* Additional custom styles */
+.hero-banner {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 3rem 2rem;
+  margin-bottom: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.stat-box {
+  background: #f8f9fa;
+  border-left: 4px solid #3498DB;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 4px;
+}
+
+.stat-box h3 {
+  margin-top: 0;
+  color: #2C3E50;
+  font-size: 2rem;
+}
+
+.stat-box p {
+  margin-bottom: 0;
+  color: #7f8c8d;
+}
+
+.key-finding {
+  background: #fff3cd;
+  border-left: 4px solid #ffc107;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 4px;
+}
+
+.interpretation {
+  background: #d1ecf1;
+  border-left: 4px solid #17a2b8;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 4px;
+}

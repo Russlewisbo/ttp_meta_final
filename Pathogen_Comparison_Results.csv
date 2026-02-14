@@ -1,0 +1,5 @@
+Analysis,Pathogen Class,k,Pooled OR,95% CI/CrI,tau,I²
+Frequentist REML,Gram-positive,12,2.31,1.6-3.33,0.5,95%
+Frequentist REML,Gram-negative,14,2.15,1.55-2.97,0.48,83.9%
+Bayesian RE,Gram-positive,12,2.17,1.52-3.36,0.47,—
+Bayesian RE,Gram-negative,14,2.06,1.48-3.15,0.49,—

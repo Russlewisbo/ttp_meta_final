@@ -1,0 +1,28 @@
+/*-- scss:defaults --*/
+$primary: #2C3E50;
+$secondary: #3498DB;
+$success: #27AE60;
+$warning: #F39C12;
+$danger: #E74C3C;
+
+/*-- scss:rules --*/
+.lead {
+  font-size: 1.2rem;
+  font-weight: 300;
+}
+
+.callout-tip {
+  border-left-color: $success;
+}
+
+.callout-warning {
+  border-left-color: $warning;
+}
+
+.callout-important {
+  border-left-color: $danger;
+}
+
+.nav-link {
+  font-weight: 500;
+}

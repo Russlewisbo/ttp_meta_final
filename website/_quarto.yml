@@ -1,0 +1,80 @@
+project:
+  type: website
+  output-dir: ../docs
+
+website:
+  title: "TTP Meta-Analysis"
+  navbar:
+    background: primary
+    search: true
+    left:
+      - text: "Home"
+        file: index.qmd
+      - text: "Methods"
+        file: methods.qmd
+      - text: "Results"
+        menu:
+          - text: "Overall Results"
+            file: results.qmd
+          - text: "Forest Plots"
+            file: forest_plots.qmd
+          - text: "Meta-Regression"
+            file: meta_regression.qmd
+      - text: "Quality Assessment"
+        menu:
+          - text: "Risk of Bias"
+            file: risk_of_bias.qmd
+          - text: "Publication Bias"
+            file: publication_bias.qmd
+      - text: "Discussion"
+        file: discussion.qmd
+    right:
+      - icon: github
+        href: https://github.com
+        
+  sidebar:
+    style: "floating"
+    search: true
+    contents:
+      - section: "Overview"
+        contents:
+          - index.qmd
+          - methods.qmd
+      - section: "Results"
+        contents:
+          - results.qmd
+          - forest_plots.qmd
+          - meta_regression.qmd
+      - section: "Quality Assessment"
+        contents:
+          - risk_of_bias.qmd
+          - publication_bias.qmd
+      - section: "Conclusions"
+        contents:
+          - discussion.qmd
+
+  page-footer:
+    left: "© 2026 Russell Lewis"
+    right: "Built with Quarto"
+
+format:
+  html:
+    theme: 
+      light: [cosmo, custom.scss]
+    css: styles.css
+    toc: true
+    toc-depth: 3
+    toc-location: right
+    number-sections: true
+    code-fold: true
+    code-summary: "Show code"
+    code-tools: true
+    fig-width: 9
+    fig-height: 6
+    link-external-newwindow: true
+
+execute:
+  warning: false
+  message: false
+  cache: true
+  freeze: auto
