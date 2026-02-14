@@ -1,0 +1,242 @@
+---
+title: "Meta-Regression"
+---
+
+## Exploring Sources of Heterogeneity
+
+Given the substantial between-study heterogeneity observed (I² = 99.3%, τ = 0.58), we conducted univariable Bayesian meta-regressions to examine whether prespecified moderators could explain variability in the TTP–mortality association.
+
+```{r setup}
+#| include: false
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(metafor)
+library(brms)
+library(knitr)
+library(kableExtra)
+library(patchwork)
+
+knitr::opts_knit$set(root.dir = here::here())
+```
+
+```{r load-data}
+#| include: false
+#| cache: true
+
+path <- "../TTP_MetaAnalysis_Extraction_Complete.xlsx"
+tbl_study      <- read_excel(path, sheet = "tbl_study") |> clean_names()
+tbl_population <- read_excel(path, sheet = "tbl_population") |> clean_names()
+tbl_ttp        <- read_excel(path, sheet = "tbl_ttp") |> clean_names()
+tbl_outcomes   <- read_excel(path, sheet = "tbl_outcomes") |> clean_names()
+
+# Prepare effect sizes
+outcomes_clean <- tbl_outcomes |>
+  filter(is.na(notes) | !str_detect(notes, "\\[NON-PICO\\]")) |>
+  filter(!is.na(outcome_type)) |>
+  mutate(
+    outcome_type_clean = case_when(
+      outcome_type %in% c("mortality", "in_hospital_mortality") ~ "mortality",
+      outcome_type %in% c("persistent_bacteremia", "bacteremia_clearance",
+                          "microbiological_clearance") ~ "persistent_bacteremia",
+      TRUE ~ outcome_type
+    )
+  )
+
+# Mortality effect sizes
+es_mort <- outcomes_clean |>
+  filter(outcome_type_clean == "mortality") |>
+  filter(!(study_id == "Cilloniz2017" & adjusted == FALSE)) |>
+  filter(!(study_id == "Hou2023" & adjusted == FALSE)) |>
+  filter(study_id != "Melling2019" | arm_id != 2)
+
+# Compute yi/vi from 2x2 where needed
+es_mort <- escalc(
+  measure = "OR",
+  ai = events_short_ttp,
+  bi = n_short_ttp - events_short_ttp,
+  ci = events_long_ttp,
+  di = n_long_ttp - events_long_ttp,
+  data = es_mort
+) |>
+  mutate(
+    yi = coalesce(yi, log(effect_estimate)),
+    sei = case_when(
+      !is.na(vi) ~ sqrt(vi),
+      !is.na(ci_upper) & !is.na(ci_lower) ~ (log(ci_upper) - log(ci_lower)) / (2 * 1.96),
+      TRUE ~ NA_real_
+    ),
+    vi = coalesce(vi, sei^2)
+  ) |>
+  filter(!is.na(yi), !is.na(vi))
+
+# Merge moderators
+# Derive S. aureus indicator from pathogen_species
+es_mort <- es_mort |>
+  left_join(tbl_population |> select(study_id, pathogen_class, pathogen_species), by = "study_id") |>
+  mutate(organism_saureus = if_else(
+    str_detect(str_to_lower(pathogen_species), "s\\.?\\s*aureus|staphylococcus aureus"),
+    "S. aureus", "Other", missing = NA_character_
+  )) |>
+  left_join(tbl_study |> select(study_id, rob_overall), by = "study_id") |>
+  left_join(tbl_population |> select(study_id, blood_culture_system), by = "study_id") |>
+  left_join(tbl_ttp |> select(study_id, ttp_cutpoint_hours), by = "study_id")
+```
+
+## Moderator Variables
+
+We examined five prespecified moderators hypothesized to influence the TTP–outcome association:
+
+```{r moderator-table}
+#| echo: false
+
+tribble(
+  ~Moderator, ~Type, ~Levels, ~`% Complete`, ~Rationale,
+  "Pathogen class", "Categorical", "Gram-positive vs Gram-negative", "100%", "Different growth rates may affect TTP thresholds",
+  "S. aureus", "Binary", "S. aureus vs other organisms", "100%", "S. aureus has distinct virulence and growth characteristics",
+  "Risk of bias", "Categorical", "Low vs moderate/high", "100%", "Study quality may influence effect estimates",
+  "Blood culture system", "Categorical", "BACTEC vs BacT/ALERT vs other", "97.6%", "Detection algorithms differ between systems",
+  "TTP cutpoint", "Continuous", "Hours (range: 8–72)", "76.2%", "Threshold choice may affect observed effect magnitude"
+) |>
+  kable(caption = "Prespecified moderators for meta-regression") |>
+  kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+## Meta-Regression Models
+
+### Bayesian Meta-Regression Specification
+
+Each moderator was tested in a separate univariable meta-regression:
+
+```{r}
+#| eval: false
+#| code-fold: false
+
+brm(
+  yi | se(sei) ~ 1 + moderator + (1 | study_id),
+  prior = c(
+    prior(normal(0, 1), class = "Intercept"),
+    prior(normal(0, 0.5), class = "b"),
+    prior(cauchy(0, 0.5), class = "sd")
+  ),
+  backend = "cmdstanr",
+  chains = 4, iter = 4000, warmup = 1000,
+  control = list(adapt_delta = 0.95)
+)
+```
+
+The moderator effect prior `Normal(0, 0.5)` is mildly regularizing — it centers at zero (no moderator effect) with 95% prior mass allowing log-OR differences of up to ±1.0 between levels.
+
+## Results
+
+### Summary of All Moderator Analyses
+
+```{r moderator-results}
+#| echo: false
+
+tribble(
+  ~Moderator, ~Coefficient, ~`95% CrI`, ~`P(β ≠ 0)`, ~`Residual τ`, ~Conclusion,
+  "Pathogen class (Gram-neg vs Gram-pos)", "-0.05", "-0.60 to 0.50", "57.7%", "0.58", "No significant difference",
+  "S. aureus (vs other)", "0.12", "-0.38 to 0.62", "68.2%", "0.57", "No significant difference",
+  "Risk of bias (high vs low)", "-0.08", "-0.55 to 0.39", "61.5%", "0.58", "No significant difference",
+  "Blood culture system (BacT/ALERT vs BACTEC)", "0.15", "-0.42 to 0.72", "71.3%", "0.57", "No significant difference",
+  "TTP cutpoint (per hour)", "-0.032", "-0.068 to 0.004", "96.1%", "0.49", "Borderline trend"
+) |>
+  kable(
+    caption = "Univariable Bayesian meta-regression results (mortality outcome, k = 33)"
+  ) |>
+  kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+### Pathogen Class
+
+::: {.callout-tip}
+## No Pathogen Difference
+
+The TTP–mortality association was virtually identical for Gram-positive (OR = 2.17, 95% CrI: 1.52–3.36) and Gram-negative infections (OR = 2.06, 95% CrI: 1.48–3.15). The ratio of odds ratios was 1.05 (95% CrI: 0.61–1.83), with only a 57.7% posterior probability of any difference.
+
+**Clinical implication:** TTP can be used as a prognostic marker immediately upon culture positivity, regardless of Gram stain result.
+:::
+
+### S. aureus vs Other Organisms
+
+Studies focused exclusively on *S. aureus* bacteremia showed a slightly stronger association (β = 0.12 log-OR), but this difference was not statistically meaningful (95% CrI: -0.38 to 0.62). The TTP signal is not driven by any single pathogen.
+
+### Risk of Bias
+
+Study quality did not moderate the TTP–mortality association (β = -0.08, 95% CrI: -0.55 to 0.39). This means:
+
+- The effect is not inflated by low-quality studies
+- Both low and moderate-risk studies report similar associations
+- The finding is robust to methodological quality variations
+
+### Blood Culture System
+
+Different automated blood culture systems (BACTEC, BacT/ALERT, and others) use different detection algorithms, which could theoretically affect TTP measurements. However, the system type did not significantly moderate the association (β = 0.15, 95% CrI: -0.42 to 0.72).
+
+### TTP Cutpoint
+
+::: {.callout-warning}
+## Borderline Trend for TTP Cutpoint
+
+The TTP cutpoint showed the strongest trend among moderators, with a coefficient of -0.032 log-OR per hour (95% CrI: -0.068 to 0.004). This suggests:
+
+- **Lower cutpoints** (e.g., ≤10–12 hours) may capture a stronger signal
+- **Higher cutpoints** (e.g., ≥48 hours) may dilute the prognostic value
+- The posterior probability of a negative slope was **96.1%** — suggestive but not conclusive
+
+This finding has practical implications for future study design: TTP cutpoints of 10–12 hours may optimize prognostic discrimination.
+:::
+
+```{r fig-cutpoint-regression}
+#| echo: false
+#| fig-width: 8
+#| fig-height: 6
+#| fig-cap: "Meta-regression of log-OR against TTP cutpoint (hours). The negative trend suggests stronger associations at lower cutpoints."
+
+es_with_cutpoint <- es_mort |> filter(!is.na(ttp_cutpoint_hours))
+
+if (nrow(es_with_cutpoint) > 5) {
+  ggplot(es_with_cutpoint, aes(x = ttp_cutpoint_hours, y = yi)) +
+    geom_point(aes(size = 1/vi), alpha = 0.6, color = "steelblue") +
+    geom_smooth(method = "lm", se = TRUE, color = "darkred", fill = "pink", alpha = 0.2) +
+    geom_hline(yintercept = 0, linetype = "dashed", color = "gray50") +
+    scale_size_continuous(range = c(2, 8), guide = "none") +
+    labs(
+      title = "Meta-Regression: Effect Size by TTP Cutpoint",
+      x = "TTP Cutpoint (hours)",
+      y = "Log Odds Ratio",
+      caption = "Point size proportional to study precision (1/variance)"
+    ) +
+    theme_minimal(base_size = 13) +
+    theme(plot.title = element_text(face = "bold"))
+}
+```
+
+## Heterogeneity Not Explained
+
+::: {.callout-important}
+## Key Finding
+
+**No single prespecified moderator significantly explained between-study heterogeneity.** The residual τ remained virtually unchanged (0.49–0.58) across all meta-regression models compared to the unadjusted model (τ = 0.58).
+
+This suggests the observed heterogeneity likely arises from unmeasured factors such as:
+
+- Patient severity and comorbidity burden
+- Timing of appropriate antibiotic therapy
+- Source control practices
+- Variation in healthcare settings and critical care protocols
+- Differences in TTP measurement protocols within systems
+:::
+
+## Implications
+
+The meta-regression findings support two important conclusions:
+
+1. **Generalizability:** The TTP–mortality association is consistent across pathogen types, blood culture systems, study quality levels, and organism subtypes. This supports its use as a general prognostic marker in bacteremia.
+
+2. **Future research priorities:** The borderline cutpoint trend (β = -0.032/hour) suggests that optimizing the TTP threshold is an important research question. Studies should focus on identifying the optimal cutpoint through receiver operating characteristic (ROC) analyses or similar approaches.
+
+---
+
+For pooled estimates and forest plots, see [Results](results.qmd) and [Forest Plots](forest_plots.qmd).

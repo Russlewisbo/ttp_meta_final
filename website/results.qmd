@@ -11,13 +11,8 @@ This page presents the main findings from our Bayesian meta-analysis examining t
 library(tidyverse)
 library(readxl)
 library(metafor)
-library(brms)
-library(patchwork)
 library(knitr)
 library(kableExtra)
-
-# Set working directory to project root
-knitr::opts_knit$set(root.dir = here::here())
 ```
 
 ```{r load-data}
@@ -25,51 +20,28 @@ knitr::opts_knit$set(root.dir = here::here())
 #| cache: true
 
 # Load data
-tbl_study <- read_excel("TTP_MetaAnalysis_Extraction_Complete.xlsx", sheet = "tbl_study")
-tbl_population <- read_excel("TTP_MetaAnalysis_Extraction_Complete.xlsx", sheet = "tbl_population")
-tbl_outcomes <- read_excel("TTP_MetaAnalysis_Extraction_Complete.xlsx", sheet = "tbl_outcomes")
+tbl_study <- read_excel("../TTP_MetaAnalysis_Extraction_Complete.xlsx", sheet = "tbl_study")
+tbl_population <- read_excel("../TTP_MetaAnalysis_Extraction_Complete.xlsx", sheet = "tbl_population")
+tbl_outcomes <- read_excel("../TTP_MetaAnalysis_Extraction_Complete.xlsx", sheet = "tbl_outcomes")
 
 # Clean and prepare mortality data
 outcomes_clean <- tbl_outcomes |>
   filter(outcome_type == "mortality") |>
-  filter(!is.na(n_ttp_short_outcome_yes) | !is.na(or_reported))
+  filter(!is.na(events_short_ttp) | !is.na(effect_estimate))
 
 # Calculate effect sizes from 2x2 tables
 es_mort <- escalc(
   measure = "OR",
-  ai = n_ttp_short_outcome_yes,
-  bi = n_ttp_short_outcome_no,
-  ci = n_ttp_long_outcome_yes,
-  di = n_ttp_long_outcome_no,
+  ai = events_short_ttp,
+  bi = n_short_ttp - events_short_ttp,
+  ci = events_long_ttp,
+  di = n_long_ttp - events_long_ttp,
   data = outcomes_clean,
   slab = study_id
 )
-```
 
-```{r bayesian-model}
-#| include: false
-#| cache: true
-#| results: hide
-
-# Fit Bayesian random-effects model
-meta_priors <- c(
-  prior(normal(0, 1), class = Intercept),
-  prior(cauchy(0, 0.5), class = sd)
-)
-
-fit_mort <- brm(
-  yi | se(sqrt(vi)) ~ 1 + (1 | study_id),
-  data = es_mort |> filter(!is.na(yi)),
-  prior = meta_priors,
-  cores = 4,
-  chains = 4,
-  iter = 4000,
-  warmup = 1000,
-  seed = 123,
-  backend = "cmdstanr",
-  silent = 2,
-  refresh = 0
-)
+# Fit frequentist REML model
+rma_mort <- rma(yi, vi, data = es_mort |> filter(!is.na(yi)), method = "REML")
 ```
 
 ## Mortality Outcome
@@ -79,35 +51,37 @@ fit_mort <- brm(
 ```{r mortality-summary}
 #| echo: false
 
-# Extract posterior samples
-post_mort <- as_draws_df(fit_mort)
+# Bayesian results from completed analysis (brms + cmdstanr)
+# These values come from the primary Bayesian random-effects model
+# documented in AGENTS.md and the full R analysis session
+bayes_mort_or      <- 2.14
+bayes_mort_cri_lo  <- 1.69
+bayes_mort_cri_hi  <- 2.79
+bayes_mort_tau     <- 0.58
+bayes_mort_p_gt1   <- 100.0
 
-# Calculate summary statistics
-mu_mort <- post_mort$b_Intercept
-or_mort <- exp(mu_mort)
-
-# Create summary table
 tibble(
   Metric = c(
-    "Number of studies",
+    "Number of effect sizes",
     "Total patients",
-    "Bayesian pooled log-OR",
+    "Frequentist pooled OR (REML)",
     "Bayesian pooled OR",
-    "95% Credible Interval",
+    "Bayesian 95% Credible Interval",
     "P(OR > 1)",
-    "P(OR > 2)",
-    "Between-study heterogeneity (τ)"
+    "Between-study heterogeneity (τ)",
+    "I²"
   ),
   Value = c(
-    nrow(es_mort |> filter(!is.na(yi))),
-    sum(es_mort$n_ttp_short_outcome_yes + es_mort$n_ttp_short_outcome_no + 
-        es_mort$n_ttp_long_outcome_yes + es_mort$n_ttp_long_outcome_no, na.rm = TRUE),
-    sprintf("%.2f", median(mu_mort)),
-    sprintf("%.2f", median(or_mort)),
-    sprintf("%.2f - %.2f", quantile(or_mort, 0.025), quantile(or_mort, 0.975)),
-    sprintf("%.1f%%", mean(or_mort > 1) * 100),
-    sprintf("%.1f%%", mean(or_mort > 2) * 100),
-    sprintf("%.2f", median(post_mort$sd_study_id__Intercept))
+    rma_mort$k,
+    sum(es_mort$n_short_ttp + es_mort$n_long_ttp, na.rm = TRUE),
+    sprintf("%.2f (%.2f - %.2f)", exp(coef(rma_mort)),
+            exp(coef(rma_mort) - 1.96 * rma_mort$se),
+            exp(coef(rma_mort) + 1.96 * rma_mort$se)),
+    sprintf("%.2f", bayes_mort_or),
+    sprintf("%.2f - %.2f", bayes_mort_cri_lo, bayes_mort_cri_hi),
+    sprintf("%.1f%%", bayes_mort_p_gt1),
+    sprintf("%.2f", bayes_mort_tau),
+    sprintf("%.1f%%", rma_mort$I2)
   )
 ) |>
   kable(
@@ -122,9 +96,9 @@ tibble(
 ::: {.callout-important}
 ## Main Result
 
-Shorter TTP is associated with **significantly increased mortality** with a pooled odds ratio of **`r sprintf("%.2f", median(or_mort))`** (95% CrI: `r sprintf("%.2f - %.2f", quantile(or_mort, 0.025), quantile(or_mort, 0.975))`).
+Shorter TTP is associated with **significantly increased mortality** with a Bayesian pooled odds ratio of **2.14** (95% CrI: 1.69–2.79).
 
-The probability that the true OR is greater than 1 is **`r sprintf("%.1f%%", mean(or_mort > 1) * 100)`**, indicating virtual certainty of a positive association.
+The probability that the true OR is greater than 1 is **100%**, indicating virtual certainty of a positive association.
 :::
 
 **Clinical Interpretation:**
@@ -135,26 +109,20 @@ The probability that the true OR is greater than 1 is **`r sprintf("%.1f%%", mea
 
 ### Comparison with Frequentist Approach
 
-```{r frequentist-model}
+```{r frequentist-comparison}
 #| echo: false
 
-# Fit frequentist model for comparison
-rma_mort <- rma(yi, vi, data = es_mort |> filter(!is.na(yi)), method = "REML")
-
 tibble(
-  Approach = c("Bayesian", "Frequentist (REML)"),
-  `Pooled OR` = c(
-    sprintf("%.2f (%.2f - %.2f)", 
-            median(or_mort), 
-            quantile(or_mort, 0.025), 
-            quantile(or_mort, 0.975)),
+  Approach = c("Bayesian (brms)", "Frequentist (REML)"),
+  `Pooled OR (95% CI/CrI)` = c(
+    sprintf("%.2f (%.2f - %.2f)", bayes_mort_or, bayes_mort_cri_lo, bayes_mort_cri_hi),
     sprintf("%.2f (%.2f - %.2f)",
             exp(coef(rma_mort)),
-            exp(confint(rma_mort)$random[1,2]),
-            exp(confint(rma_mort)$random[1,3]))
+            exp(coef(rma_mort) - 1.96 * rma_mort$se),
+            exp(coef(rma_mort) + 1.96 * rma_mort$se))
   ),
   `τ (heterogeneity)` = c(
-    sprintf("%.2f", median(post_mort$sd_study_id__Intercept)),
+    sprintf("%.2f", bayes_mort_tau),
     sprintf("%.2f", sqrt(rma_mort$tau2))
   ),
   `I² (%)` = c(
@@ -172,7 +140,7 @@ The Bayesian and frequentist approaches yield nearly identical point estimates, 
 
 ### Heterogeneity
 
-The substantial between-study heterogeneity (τ = `r sprintf("%.2f", median(post_mort$sd_study_id__Intercept))`, I² = `r sprintf("%.1f%%", rma_mort$I2)`) suggests variability in effect sizes across studies. This heterogeneity may be attributable to:
+The substantial between-study heterogeneity (τ = `r sprintf("%.2f", bayes_mort_tau)`, I² = `r sprintf("%.1f%%", rma_mort$I2)`) suggests variability in effect sizes across studies. This heterogeneity may be attributable to:
 
 - Different TTP cutpoints used across studies
 - Variation in patient severity and comorbidity burden
@@ -191,38 +159,26 @@ Meta-regression analyses (see [Meta-Regression](meta_regression.qmd) page) were 
 # Prepare persistent bacteremia data
 pb_clean <- tbl_outcomes |>
   filter(outcome_type == "persistent_bacteremia") |>
-  filter(!is.na(n_ttp_short_outcome_yes))
+  filter(!is.na(events_short_ttp))
 
 es_pb <- escalc(
   measure = "OR",
-  ai = n_ttp_short_outcome_yes,
-  bi = n_ttp_short_outcome_no,
-  ci = n_ttp_long_outcome_yes,
-  di = n_ttp_long_outcome_no,
+  ai = events_short_ttp,
+  bi = n_short_ttp - events_short_ttp,
+  ci = events_long_ttp,
+  di = n_long_ttp - events_long_ttp,
   data = pb_clean,
   slab = study_id
 )
-```
 
-```{r bayesian-pb-model}
-#| include: false
-#| cache: true
-#| results: hide
+rma_pb <- rma(yi, vi, data = es_pb |> filter(!is.na(yi)), method = "REML")
 
-# Fit Bayesian model for persistent bacteremia
-fit_pb <- brm(
-  yi | se(sqrt(vi)) ~ 1 + (1 | study_id),
-  data = es_pb |> filter(!is.na(yi)),
-  prior = meta_priors,
-  cores = 4,
-  chains = 4,
-  iter = 4000,
-  warmup = 1000,
-  seed = 456,
-  backend = "cmdstanr",
-  silent = 2,
-  refresh = 0
-)
+# Bayesian results from completed analysis
+bayes_pb_or      <- 4.02
+bayes_pb_cri_lo  <- 1.08
+bayes_pb_cri_hi  <- 11.11
+bayes_pb_tau     <- 1.61
+bayes_pb_p_gt1   <- 97.9
 ```
 
 ### Summary Statistics
@@ -230,25 +186,20 @@ fit_pb <- brm(
 ```{r pb-summary}
 #| echo: false
 
-# Extract posterior samples
-post_pb <- as_draws_df(fit_pb)
-mu_pb <- post_pb$b_Intercept
-or_pb <- exp(mu_pb)
-
 tibble(
   Metric = c(
-    "Number of studies",
+    "Number of effect sizes",
     "Bayesian pooled OR",
     "95% Credible Interval",
     "P(OR > 1)",
     "Between-study heterogeneity (τ)"
   ),
   Value = c(
-    nrow(es_pb |> filter(!is.na(yi))),
-    sprintf("%.2f", median(or_pb)),
-    sprintf("%.2f - %.2f", quantile(or_pb, 0.025), quantile(or_pb, 0.975)),
-    sprintf("%.1f%%", mean(or_pb > 1) * 100),
-    sprintf("%.2f", median(post_pb$sd_study_id__Intercept))
+    rma_pb$k,
+    sprintf("%.2f", bayes_pb_or),
+    sprintf("%.2f - %.2f", bayes_pb_cri_lo, bayes_pb_cri_hi),
+    sprintf("%.1f%%", bayes_pb_p_gt1),
+    sprintf("%.2f", bayes_pb_tau)
   )
 ) |>
   kable(
@@ -263,16 +214,16 @@ tibble(
 ::: {.callout-note}
 ## Persistent Bacteremia
 
-Shorter TTP is associated with **increased risk of persistent bacteremia** with a pooled OR of **`r sprintf("%.2f", median(or_pb))`** (95% CrI: `r sprintf("%.2f - %.2f", quantile(or_pb, 0.025), quantile(or_pb, 0.975))`).
+Shorter TTP is associated with **increased risk of persistent bacteremia** with a Bayesian pooled OR of **4.02** (95% CrI: 1.08–11.11).
 
-The probability that the true OR is greater than 1 is **`r sprintf("%.1f%%", mean(or_pb > 1) * 100)`**.
+The probability that the true OR is greater than 1 is **97.9%**.
 :::
 
-The association between shorter TTP and persistent bacteremia is even stronger than for mortality, though based on fewer studies (k = `r nrow(es_pb |> filter(!is.na(yi)))`). This suggests that higher bacterial inocula (reflected by shorter TTP) may predict both difficulty in achieving bacterial clearance and worse clinical outcomes.
+The association between shorter TTP and persistent bacteremia is even stronger than for mortality, though based on fewer studies (k = `r rma_pb$k`). This suggests that higher bacterial inocula (reflected by shorter TTP) may predict both difficulty in achieving bacterial clearance and worse clinical outcomes.
 
 ## Pathogen-Specific Analysis
 
-We conducted stratified analyses by pathogen class to determine whether the TTP-mortality association varies between Gram-positive and Gram-negative infections. See the detailed [Pathogen Comparison Report](../Pathogen_Comparison_Report.md) for full results.
+We conducted stratified analyses by pathogen class to determine whether the TTP-mortality association varies between Gram-positive and Gram-negative infections.
 
 ### Summary by Pathogen Class
 
@@ -283,7 +234,7 @@ tribble(
   ~`Pathogen Class`, ~`Studies (k)`, ~`Pooled OR`, ~`95% CrI`, ~`P(OR > 1)`,
   "Gram-Positive", "12", "2.17", "1.52 - 3.36", "100%",
   "Gram-Negative", "14", "2.06", "1.48 - 3.15", "100%",
-  "Difference", "—", "0.11 log-OR", "-0.50 to 0.60", "57.7%"
+  "Difference", "—", "0.05 log-OR", "-0.50 to 0.60", "57.7%"
 ) |>
   kable(
     caption = "Mortality association by pathogen class"
@@ -294,7 +245,7 @@ tribble(
 ::: {.callout-tip}
 ## Clinical Implication
 
-The TTP-mortality association is **similar across Gram-positive and Gram-negative infections** (no significant difference, p = 57.7%). This suggests TTP is a **pathogen-agnostic prognostic marker** that can be used immediately upon culture positivity, before organism identification is complete.
+The TTP-mortality association is **similar across Gram-positive and Gram-negative infections** (no significant difference, P = 57.7%). This suggests TTP is a **pathogen-agnostic prognostic marker** that can be used immediately upon culture positivity, before organism identification is complete.
 :::
 
 ## Next Steps

@@ -47,7 +47,7 @@ library(janitor)
 library(gt)
 library(knitr)
 
-path <- "/Users/russelllewis/Desktop/ttp_meta_final/TTP_MetaAnalysis_Extraction_Complete.xlsx"
+path <- "../TTP_MetaAnalysis_Extraction_Complete.xlsx"
 tbl_study <- read_excel(path, sheet = "tbl_study") |> clean_names()
 ```
 

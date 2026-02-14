@@ -1,0 +1,758 @@
+[
+  {
+    "objectID": "publication_bias.html",
+    "href": "publication_bias.html",
+    "title": "Publication Bias",
+    "section": "",
+    "text": "Publication bias — the tendency for studies with significant or positive results to be more readily published — is a major threat to the validity of any meta-analysis. We used multiple complementary approaches to detect and adjust for potential publication bias.",
+    "crumbs": [
+      "Home",
+      "Quality Assessment",
+      "Publication Bias"
+    ]
+  },
+  {
+    "objectID": "publication_bias.html#assessing-and-adjusting-for-selective-reporting",
+    "href": "publication_bias.html#assessing-and-adjusting-for-selective-reporting",
+    "title": "Publication Bias",
+    "section": "",
+    "text": "Publication bias — the tendency for studies with significant or positive results to be more readily published — is a major threat to the validity of any meta-analysis. We used multiple complementary approaches to detect and adjust for potential publication bias.",
+    "crumbs": [
+      "Home",
+      "Quality Assessment",
+      "Publication Bias"
+    ]
+  },
+  {
+    "objectID": "publication_bias.html#funnel-plot-analysis",
+    "href": "publication_bias.html#funnel-plot-analysis",
+    "title": "Publication Bias",
+    "section": "2 Funnel Plot Analysis",
+    "text": "2 Funnel Plot Analysis\n\n\n\n\n\n\n\n\nFigure 1: Funnel plot for mortality studies with trim-and-fill imputed studies shown in red. The asymmetry with a deficit of small studies in the lower-left quadrant suggests potential publication bias.\n\n\n\n\n\nThe funnel plot reveals clear asymmetry: there is a deficit of small, non-significant studies in the lower-left portion. The trim-and-fill procedure imputed 10 studies to restore symmetry.",
+    "crumbs": [
+      "Home",
+      "Quality Assessment",
+      "Publication Bias"
+    ]
+  },
+  {
+    "objectID": "publication_bias.html#statistical-tests-for-funnel-asymmetry",
+    "href": "publication_bias.html#statistical-tests-for-funnel-asymmetry",
+    "title": "Publication Bias",
+    "section": "3 Statistical Tests for Funnel Asymmetry",
+    "text": "3 Statistical Tests for Funnel Asymmetry\n\n\n\nTests for funnel plot asymmetry\n\n\nTest\nStatistic\np-value\nInterpretation\n\n\n\n\nEgger's regression\nz = 4.59\np &lt; 0.001\nSignificant asymmetry detected\n\n\nRank correlation (Begg)\n—\n—\nConsistent with Egger's test\n\n\n\n\n\n\n\n\n\n\n\nWarningSignificant Funnel Asymmetry\n\n\n\nEgger’s regression test was highly significant (p &lt; 0.001), indicating substantial funnel plot asymmetry. Only 3 of 33 mortality studies (9%) reported non-significant results — a rate higher than expected even for a true effect of OR = 2.14.",
+    "crumbs": [
+      "Home",
+      "Quality Assessment",
+      "Publication Bias"
+    ]
+  },
+  {
+    "objectID": "publication_bias.html#adjustment-methods",
+    "href": "publication_bias.html#adjustment-methods",
+    "title": "Publication Bias",
+    "section": "4 Adjustment Methods",
+    "text": "4 Adjustment Methods\n\n4.1 Overview of All Approaches\n\n\n\nComparison of publication bias adjustment approaches\n\n\nMethod\nPooled OR\n95% CI/CrI\nSignificant?\nNotes\n\n\n\n\nUnadjusted (REML)\n2.18\n1.72–2.75\nYes\nPrimary frequentist estimate\n\n\nTrim-and-Fill\n1.50\n1.15–1.96\nYes\n11 studies imputed\n\n\nFreq. Step-function Selection\n1.09\n0.67–1.79\nNo\nδ = 0.037 (extreme adjustment)\n\n\nBayesian Selection (uniform δ)\n2.14\n1.70–2.78\nYes\nP(OR&gt;1) = 100%\n\n\nBayesian Selection (skeptical δ)\n2.14\n1.71–2.80\nYes\nP(OR&gt;1) = 100%\n\n\nBayesian RE (primary)\n2.14\n1.69–2.79\nYes\nP(OR&gt;1) = 100%\n\n\n\n\n\n\n\n4.2 Trim-and-Fill\nThe Duval and Tweedie trim-and-fill method imputed 11 missing studies and reduced the pooled estimate from OR = 2.18 to OR = 1.50 (95% CI: 1.15–1.96). The adjusted estimate remained statistically significant, suggesting that even after accounting for potentially missing studies, shorter TTP is associated with increased mortality.\n\n\n4.3 Frequentist Selection Model\n\n\n\n\n\n\nNoteExtreme Adjustment with Sparse Data\n\n\n\nThe frequentist step-function selection model estimated δ = 0.037, meaning non-significant studies had only a 3.7% probability of being observed relative to significant studies. This extreme selection parameter pushed the adjusted OR to 1.09 (95% CI: 0.67–1.79), rendering the association non-significant.\nHowever, this result should be interpreted with caution: with only 3 non-significant studies, the maximum likelihood estimator for δ is unstable and tends toward extreme values.\n\n\n\n\n4.4 Bayesian Selection Models\nTo address the limitations of frequentist selection models with sparse non-significant data, we implemented fully Bayesian step-function selection models in Stan.\nTwo prior specifications for the selection parameter δ:\n\n\n\nBayesian selection model results\n\n\nPrior on δ\nPrior Rationale\nPosterior δ (median)\nAdjusted OR\n95% CrI\n\n\n\n\nUniform(0, 1)\nUninformative — all selection levels equally likely\n0.84\n2.14\n1.70–2.78\n\n\nBeta(2, 5)\nSkeptical — expects moderate selection (mean = 0.29)\n0.50\n2.14\n1.71–2.80\n\n\n\n\n\n\n\n\n\n\n\nImportantKey Finding: Robust to Publication Bias\n\n\n\nBoth Bayesian selection models yielded pooled ORs of ~2.14 with P(OR &gt; 1) = 100%, essentially unchanged from the unadjusted estimate. This occurs because the Bayesian framework:\n\nRegularizes the selection parameter away from extreme values\nPropagates uncertainty about the degree of selection into the pooled estimate\nAvoids overfitting to the sparse non-significant study data",
+    "crumbs": [
+      "Home",
+      "Quality Assessment",
+      "Publication Bias"
+    ]
+  },
+  {
+    "objectID": "publication_bias.html#why-the-discrepancy-between-approaches",
+    "href": "publication_bias.html#why-the-discrepancy-between-approaches",
+    "title": "Publication Bias",
+    "section": "5 Why the Discrepancy Between Approaches?",
+    "text": "5 Why the Discrepancy Between Approaches?\n\n\n\n\n\n\n\n\nFigure 2: Comparison of pooled odds ratios across publication bias adjustment methods. Error bars show 95% CI or CrI.\n\n\n\n\n\nThe discrepancy between frequentist and Bayesian selection models arises from the data characteristics:\n\nOnly 9% non-significant studies — the frequentist MLE has very little data to estimate the selection function, leading to extreme parameter values (δ → 0)\nBayesian priors regularize — even the uninformative Uniform(0,1) prior provides enough regularization to avoid the extreme adjustment\n91% significance rate — this rate is higher than expected even for a large true effect, but the Bayesian approach accounts for uncertainty about why",
+    "crumbs": [
+      "Home",
+      "Quality Assessment",
+      "Publication Bias"
+    ]
+  },
+  {
+    "objectID": "publication_bias.html#interpretation-and-conclusions",
+    "href": "publication_bias.html#interpretation-and-conclusions",
+    "title": "Publication Bias",
+    "section": "6 Interpretation and Conclusions",
+    "text": "6 Interpretation and Conclusions\n\n6.1 Balanced Assessment\nEvidence for publication bias:\n\nSignificant funnel asymmetry (Egger’s p &lt; 0.001)\nDeficit of small non-significant studies\n91% of studies are statistically significant\n\nEvidence for a real effect despite bias:\n\nAll Bayesian models confirm OR &gt; 1 with 100% posterior probability\nTrim-and-fill adjusted estimate (OR = 1.50) remains significant\nThe effect is consistent across study quality levels and subgroups\nLarge studies also show positive associations\n\nBest estimate of the true effect:\nThe true effect likely lies between OR = 1.50 (trim-and-fill, conservative lower bound) and OR = 2.14 (Bayesian primary estimate). The frequentist selection model estimate of 1.09 likely represents over-adjustment.\nShort TTP is robustly associated with increased mortality across all analytical approaches except the most extreme frequentist correction, which is unreliable with sparse non-significant studies.",
+    "crumbs": [
+      "Home",
+      "Quality Assessment",
+      "Publication Bias"
+    ]
+  },
+  {
+    "objectID": "publication_bias.html#stan-model-implementation",
+    "href": "publication_bias.html#stan-model-implementation",
+    "title": "Publication Bias",
+    "section": "7 Stan Model Implementation",
+    "text": "7 Stan Model Implementation\nFor reproducibility, the Bayesian selection model was implemented as a custom Stan program:\ndata {\n  int&lt;lower=0&gt; K;          // number of studies\n  vector[K] y;             // observed log-OR\n  vector&lt;lower=0&gt;[K] se;   // standard errors\n  int&lt;lower=0,upper=1&gt; sig[K]; // 1 = significant, 0 = not\n}\nparameters {\n  real mu;                  // pooled effect\n  real&lt;lower=0&gt; tau;        // between-study SD\n  vector[K] theta;          // study-specific effects\n  real&lt;lower=0,upper=1&gt; delta; // selection parameter\n}\nmodel {\n  // Priors\n  mu ~ normal(0, 1);\n  tau ~ cauchy(0, 0.5);\n  delta ~ beta(2, 5);       // skeptical prior\n\n  // Random effects\n  theta ~ normal(mu, tau);\n\n  // Likelihood\n  y ~ normal(theta, se);\n\n  // Selection mechanism\n  for (k in 1:K) {\n    if (sig[k] == 0) {\n      target += log(delta);\n    }\n  }\n}\n\nFor the overall results, see Results. For study quality assessment, see Risk of Bias.",
+    "crumbs": [
+      "Home",
+      "Quality Assessment",
+      "Publication Bias"
+    ]
+  },
+  {
+    "objectID": "methods.html",
+    "href": "methods.html",
+    "title": "Methods",
+    "section": "",
+    "text": "Studies were included if they:\n\nExamined patients with bloodstream infection/bacteremia\nMeasured blood culture time to positivity (TTP)\nReported clinical outcomes (mortality or persistent bacteremia)\nProvided sufficient data for effect size computation\n\n\n\n\nPrimary Database: TTP_MetaAnalysis_Extraction_Complete.xlsx\nThe extraction database contains four relational tables:\n\n\n\n\n\n\n\n\nDatabase Architecture\n\n\nTable\nDescription\nRows\nKey\n\n\n\n\n`tbl_study`\nStudy metadata (author, year, design, risk of bias)\n57\n`study_id`\n\n\n`tbl_population`\nPopulation characteristics (pathogen, source, severity)\n57\n`study_id`\n\n\n`tbl_ttp`\nTTP measurement details (cutpoints, blood culture system)\n57\n`study_id`\n\n\n`tbl_outcomes`\nOutcome data (2×2 tables, effect estimates)\n88\n`study_id`, `arm_id`",
+    "crumbs": [
+      "Home",
+      "Overview",
+      "Methods"
+    ]
+  },
+  {
+    "objectID": "methods.html#study-selection-and-data-extraction",
+    "href": "methods.html#study-selection-and-data-extraction",
+    "title": "Methods",
+    "section": "",
+    "text": "Studies were included if they:\n\nExamined patients with bloodstream infection/bacteremia\nMeasured blood culture time to positivity (TTP)\nReported clinical outcomes (mortality or persistent bacteremia)\nProvided sufficient data for effect size computation\n\n\n\n\nPrimary Database: TTP_MetaAnalysis_Extraction_Complete.xlsx\nThe extraction database contains four relational tables:\n\n\n\n\n\n\n\n\nDatabase Architecture\n\n\nTable\nDescription\nRows\nKey\n\n\n\n\n`tbl_study`\nStudy metadata (author, year, design, risk of bias)\n57\n`study_id`\n\n\n`tbl_population`\nPopulation characteristics (pathogen, source, severity)\n57\n`study_id`\n\n\n`tbl_ttp`\nTTP measurement details (cutpoints, blood culture system)\n57\n`study_id`\n\n\n`tbl_outcomes`\nOutcome data (2×2 tables, effect estimates)\n88\n`study_id`, `arm_id`",
+    "crumbs": [
+      "Home",
+      "Overview",
+      "Methods"
+    ]
+  },
+  {
+    "objectID": "methods.html#effect-size-computation",
+    "href": "methods.html#effect-size-computation",
+    "title": "Methods",
+    "section": "2 Effect Size Computation",
+    "text": "2 Effect Size Computation\n\n2.1 Hierarchy of Effect Estimates\nEffect sizes were computed following this priority hierarchy:\n\nReported adjusted estimates (OR/HR/RR with CI) — preferred\nReported unadjusted estimates (OR/HR/RR with CI)\nComputed from 2×2 tables using metafor::escalc()\nContinuous TTP effects (OR per hour) — analyzed separately\n\n\n\n2.2 Standardization to Log-Odds Ratios\nAll effect estimates were converted to log-odds ratios (log-OR) with sampling variances:\nFrom 2×2 tables:\n\nescalc(\n  measure = \"OR\",\n  ai = events_short_ttp,\n  bi = n_short_ttp - events_short_ttp,\n  ci = events_long_ttp,\n  di = n_long_ttp - events_long_ttp\n)\n\nFrom reported OR/HR/RR with 95% CI:\n\nyi = log(effect_estimate)\nsei = (log(ci_upper) - log(ci_lower)) / (2 * 1.96)\nvi = sei^2\n\n\n\n2.3 Deduplication Rules\nWhen multiple effect estimates were available from the same study:\n\nPrefer adjusted over unadjusted (Cilloniz2017, Hou2023)\nRemove extreme sparse-cell estimates (Melling2019 OR = 1722)\nKeep legitimate subgroups (Marco2025 — two distinct populations)",
+    "crumbs": [
+      "Home",
+      "Overview",
+      "Methods"
+    ]
+  },
+  {
+    "objectID": "methods.html#statistical-analysis",
+    "href": "methods.html#statistical-analysis",
+    "title": "Methods",
+    "section": "3 Statistical Analysis",
+    "text": "3 Statistical Analysis\n\n3.1 Primary Model: Bayesian Random-Effects\nWe fit Bayesian hierarchical models using brms:\n\nbrm(\n  yi | se(sei) ~ 1 + (1 | study_id),\n  data = es_data,\n  prior = c(\n    prior(normal(0, 1), class = \"Intercept\"),\n    prior(cauchy(0, 0.5), class = \"sd\")\n  ),\n  backend = \"cmdstanr\",\n  chains = 4, \n  iter = 4000, \n  warmup = 1000,\n  control = list(adapt_delta = 0.95)\n)\n\n\n\n3.2 Prior Specification Rationale\n\n\n\n\n\n\nNoteWeakly Informative Priors\n\n\n\nIntercept: Normal(0, 1)\n- On log-OR scale - 95% prior mass: OR ∈ [0.14, 7.4] - Compatible with wide range of clinically plausible effects\nBetween-study SD (τ): Half-Cauchy(0, 0.5)\n- Allows moderate to substantial heterogeneity - Regularizes extreme values - Recommended by Gelman (2006) for hierarchical models\n\n\n\n\n3.3 Validation: Frequentist REML\nFrequentist random-effects models via metafor provided convergence validation:\n\nrma(yi = yi, vi = vi, data = es_data, method = \"REML\")\n\n\n\n3.4 Meta-Regression\nUnivariable meta-regressions tested prespecified moderators:\n\nbrm(\n  yi | se(sei) ~ 1 + moderator + (1 | study_id),\n  prior = c(\n    prior(normal(0, 1), class = \"Intercept\"),\n    prior(normal(0, 0.5), class = \"b\"),  # moderator effects\n    prior(cauchy(0, 0.5), class = \"sd\")\n  ),\n  ...\n)\n\nModerators examined:\n\nPathogen class (Gram-positive vs Gram-negative)\nStaphylococcus aureus vs other organisms\nRisk of bias (low vs moderate/high)\nBlood culture system (BACTEC vs BacTALERT vs other)\nTTP cutpoint (continuous, where available)",
+    "crumbs": [
+      "Home",
+      "Overview",
+      "Methods"
+    ]
+  },
+  {
+    "objectID": "methods.html#publication-bias-assessment",
+    "href": "methods.html#publication-bias-assessment",
+    "title": "Methods",
+    "section": "4 Publication Bias Assessment",
+    "text": "4 Publication Bias Assessment\n\n4.1 Graphical Methods\n\nFunnel plot — scatter plot of effect size vs standard error\nTrim-and-fill — imputation of missing studies (Duval & Tweedie, 2000)\n\n\n\n4.2 Statistical Tests\n\nEgger’s regression test — test for funnel asymmetry\nSelection models — adjust for selective publication\n\n\n\n4.3 Bayesian Selection Model\nTo address limitations of frequentist selection models with sparse non-significant studies, we implemented a fully Bayesian step-function selection model in Stan:\nmodel {\n  // Priors\n  mu ~ normal(0, 1);\n  tau ~ cauchy(0, 0.5);\n  delta ~ beta(2, 5);  // selection parameter (skeptical prior)\n  \n  // Random effects\n  theta ~ normal(mu, tau);\n  \n  // Likelihood\n  y ~ normal(theta, se);\n  \n  // Selection mechanism\n  for (k in 1:K) {\n    if (sig[k] == 0) {  // non-significant study\n      target += log(delta);  // downweight by delta\n    }\n  }\n}\nThe selection parameter δ represents the relative probability of observing a non-significant vs significant study. The Beta(2, 5) prior is skeptical, centering δ around 0.29.",
+    "crumbs": [
+      "Home",
+      "Overview",
+      "Methods"
+    ]
+  },
+  {
+    "objectID": "methods.html#sensitivity-analyses",
+    "href": "methods.html#sensitivity-analyses",
+    "title": "Methods",
+    "section": "5 Sensitivity Analyses",
+    "text": "5 Sensitivity Analyses\n\n5.1 Outlier Exclusion\nStudies with extreme effect sizes were identified and excluded:\n\nMortality: Ji2020 (OR = 40.45)\nPersistent bacteremia: Melling2019 (OR = 37), Kassis2009 (OR = 75)\n\n\n\n5.2 Prior Sensitivity\nWe tested four prior specifications for the mortality analysis:\n\nPrimary: Normal(0, 1) + Half-Cauchy(0, 0.5)\nWide: Normal(0, 2) + Half-Cauchy(0, 0.5)\nSkeptical: Normal(0, 0.5) + Half-Cauchy(0, 0.5)\nHalf-Normal τ: Normal(0, 1) + Half-Normal(0, 0.5)",
+    "crumbs": [
+      "Home",
+      "Overview",
+      "Methods"
+    ]
+  },
+  {
+    "objectID": "methods.html#risk-of-bias-assessment",
+    "href": "methods.html#risk-of-bias-assessment",
+    "title": "Methods",
+    "section": "6 Risk of Bias Assessment",
+    "text": "6 Risk of Bias Assessment\nStudies were assessed using adapted Newcastle-Ottawa Scale criteria across six domains:\n\nSelection — representativeness, consecutive enrollment\nComparability — control for confounding\nOutcome — assessment method, blinding\nStatistical Analysis — appropriate methods, adjustment\nAttrition — completeness of follow-up\nPrognostic Measurement — TTP measurement validity\n\nEach domain rated as: Low, Moderate, or High risk.\nOverall risk of bias: Low, Moderate, High, or Critical",
+    "crumbs": [
+      "Home",
+      "Overview",
+      "Methods"
+    ]
+  },
+  {
+    "objectID": "methods.html#software-and-packages",
+    "href": "methods.html#software-and-packages",
+    "title": "Methods",
+    "section": "7 Software and Packages",
+    "text": "7 Software and Packages\nAll analyses conducted in R 4.5+ with:\n\n# Core packages\nlibrary(tidyverse)    # Data manipulation\nlibrary(readxl)       # Excel import\nlibrary(metafor)      # Frequentist meta-analysis\nlibrary(brms)         # Bayesian meta-analysis\nlibrary(rstan)        # Custom Stan models\n\n# Visualization\nlibrary(ggplot2)\nlibrary(patchwork)\nlibrary(bayesplot)\n\n# Diagnostics\nlibrary(posterior)\nlibrary(ggdist)\n\nComputational Environment:\n\nR version: 4.5.1\nStan backend: CmdStanR (preferred) or RStan\nParallel chains: 4\nMCMC iterations: 4000 (1000 warmup)",
+    "crumbs": [
+      "Home",
+      "Overview",
+      "Methods"
+    ]
+  },
+  {
+    "objectID": "methods.html#reporting-standards",
+    "href": "methods.html#reporting-standards",
+    "title": "Methods",
+    "section": "8 Reporting Standards",
+    "text": "8 Reporting Standards\nThis meta-analysis follows:\n\nPRISMA 2020 (Preferred Reporting Items for Systematic Reviews and Meta-Analyses)\nMOOSE (Meta-analysis Of Observational Studies in Epidemiology)\n\n\nReferences:\n\nGelman A. Prior distributions for variance parameters in hierarchical models. Bayesian Anal. 2006;1(3):515-534.\nDuval S, Tweedie R. Trim and fill: A simple funnel-plot-based method. Biometrics. 2000;56(2):455-463.",
+    "crumbs": [
+      "Home",
+      "Overview",
+      "Methods"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Time to Positivity & Clinical Outcomes in Bacteremia",
+    "section": "",
+    "text": "This comprehensive meta-analysis examines whether shorter blood culture time to positivity (TTP) predicts worse clinical outcomes in patients with bacteremia.",
+    "crumbs": [
+      "Home",
+      "Overview",
+      "Time to Positivity & Clinical Outcomes in Bacteremia"
+    ]
+  },
+  {
+    "objectID": "index.html#executive-summary",
+    "href": "index.html#executive-summary",
+    "title": "Time to Positivity & Clinical Outcomes in Bacteremia",
+    "section": "1.1 Executive Summary",
+    "text": "1.1 Executive Summary\nBlood culture time to positivity (TTP) — the interval between culture incubation and microbial growth detection — has emerged as a potential prognostic marker in bacteremia. Shorter TTP is hypothesized to reflect higher bacterial inocula, which may signal more severe infection and increased risk of adverse outcomes.\n\n1.1.1 Primary Findings\n\n\n1.1.2 Mortality\nPooled OR: 2.14 (95% CrI: 1.69–2.79)\nBased on 33 studies with P(OR &gt; 1) = 100%\n\n\n1.1.3 Persistent Bacteremia\nPooled OR: 4.02 (95% CrI: 1.08–11.11)\nBased on 7 studies with P(OR &gt; 1) = 97.9%\n\n\nKey Finding: Short TTP is robustly associated with increased mortality risk. The association remains significant across all sensitivity analyses, prior specifications, and publication bias adjustment methods.",
+    "crumbs": [
+      "Home",
+      "Overview",
+      "Time to Positivity & Clinical Outcomes in Bacteremia"
+    ]
+  },
+  {
+    "objectID": "index.html#study-characteristics",
+    "href": "index.html#study-characteristics",
+    "title": "Time to Positivity & Clinical Outcomes in Bacteremia",
+    "section": "1.2 Study Characteristics",
+    "text": "1.2 Study Characteristics\n\n\n\n\n\n\n\n\nMeta-Analysis Overview\n\n\n\n\n\n\n\n\nTotal Studies\n57\n\n\nPublication Period\n2005–2025\n\n\nTotal Patients\n~50,000+\n\n\nCountries Represented\n15+\n\n\nProspective Cohorts\n13 (23%)\n\n\nLow Risk of Bias\n15 (26%)",
+    "crumbs": [
+      "Home",
+      "Overview",
+      "Time to Positivity & Clinical Outcomes in Bacteremia"
+    ]
+  },
+  {
+    "objectID": "index.html#outcomes-examined",
+    "href": "index.html#outcomes-examined",
+    "title": "Time to Positivity & Clinical Outcomes in Bacteremia",
+    "section": "1.3 Outcomes Examined",
+    "text": "1.3 Outcomes Examined\nThis meta-analysis investigated two primary clinical outcomes:\n\nMortality (all-cause, typically 30-day or in-hospital)\n\n33 effect sizes from 31 unique studies\nMedian OR = 2.64 (IQR: 1.54–4.49)\n\nPersistent Bacteremia (microbiological clearance failure)\n\n9 effect sizes from 7 unique studies\nMedian OR = 2.02 (IQR: 1.25–5.73)",
+    "crumbs": [
+      "Home",
+      "Overview",
+      "Time to Positivity & Clinical Outcomes in Bacteremia"
+    ]
+  },
+  {
+    "objectID": "index.html#analytical-approach",
+    "href": "index.html#analytical-approach",
+    "title": "Time to Positivity & Clinical Outcomes in Bacteremia",
+    "section": "1.4 Analytical Approach",
+    "text": "1.4 Analytical Approach\n\n1.4.1 Bayesian Framework\nWe employed a Bayesian random-effects framework using brms with weakly informative priors:\n\nPooled effect (μ): Normal(0, 1) prior on log-OR scale\nBetween-study heterogeneity (τ): Half-Cauchy(0, 0.5)\nMCMC: 4 chains, 4000 iterations (1000 warmup)\n\nFrequentist REML models via metafor provided validation.\n\n\n1.4.2 Key Analyses\n\n✅ Random-effects meta-analysis (Bayesian & frequentist)\n✅ Publication bias assessment (funnel plots, Egger’s test, trim-and-fill, selection models)\n✅ Sensitivity analyses (outlier exclusion, prior sensitivity)\n✅ Meta-regression (pathogen, organism, risk of bias, blood culture system)\n✅ Risk of bias assessment (6 domains, 45 studies)",
+    "crumbs": [
+      "Home",
+      "Overview",
+      "Time to Positivity & Clinical Outcomes in Bacteremia"
+    ]
+  },
+  {
+    "objectID": "index.html#heterogeneity",
+    "href": "index.html#heterogeneity",
+    "title": "Time to Positivity & Clinical Outcomes in Bacteremia",
+    "section": "1.5 Heterogeneity",
+    "text": "1.5 Heterogeneity\nSubstantial between-study heterogeneity was observed:\n\nI² = 99.3% (mortality)\nτ = 0.58 (log-OR scale)\n\nMeta-regression found no moderator significantly explained heterogeneity, suggesting unmeasured factors (TTP cutpoint variation, patient severity, antibiotic timing) drive variability.",
+    "crumbs": [
+      "Home",
+      "Overview",
+      "Time to Positivity & Clinical Outcomes in Bacteremia"
+    ]
+  },
+  {
+    "objectID": "index.html#publication-bias",
+    "href": "index.html#publication-bias",
+    "title": "Time to Positivity & Clinical Outcomes in Bacteremia",
+    "section": "1.6 Publication Bias",
+    "text": "1.6 Publication Bias\n\n\n\n\n\n\nWarningEvidence of Funnel Asymmetry\n\n\n\n\nEgger’s test: p &lt; 0.001\nTrim-and-fill imputed studies: 11\nOnly 9% of studies (3/33) were non-significant\n\n\n\nMultiple adjustment approaches were applied:\n\n\n\nMethod\nPooled OR\n95% CI/CrI\nSignificant?\n\n\n\n\nUnadjusted\n2.18\n1.72–2.75\nYes\n\n\nTrim-and-Fill\n1.50\n1.15–1.96\nYes\n\n\nFreq. Selection\n1.09\n0.67–1.79\nNo\n\n\nBayesian Selection\n2.14\n1.70–2.78\nYes\n\n\n\n\nInterpretation: The Bayesian selection model with regularized selection parameters suggests the true effect likely lies between OR 1.50 (conservative lower bound) and 2.14 (primary estimate). The frequentist selection model likely over-adjusts due to sparse non-significant studies.",
+    "crumbs": [
+      "Home",
+      "Overview",
+      "Time to Positivity & Clinical Outcomes in Bacteremia"
+    ]
+  },
+  {
+    "objectID": "index.html#clinical-implications",
+    "href": "index.html#clinical-implications",
+    "title": "Time to Positivity & Clinical Outcomes in Bacteremia",
+    "section": "1.7 Clinical Implications",
+    "text": "1.7 Clinical Implications\nShort blood culture TTP is a readily available early prognostic marker that:\n\n✅ Strongly predicts increased mortality (OR ~2.14)\n✅ Associates with persistent bacteremia (OR ~4.02)\n✅ Remains significant across quality levels and sensitivity analyses\n✅ Could inform clinical decision-making in real-time\n\n\n1.7.1 Potential Applications\n\nRisk stratification for intensive monitoring\nTreatment escalation decisions (e.g., source control urgency)\nPrognostic counseling for patients and families\nClinical trial enrichment to identify high-risk patients",
+    "crumbs": [
+      "Home",
+      "Overview",
+      "Time to Positivity & Clinical Outcomes in Bacteremia"
+    ]
+  },
+  {
+    "objectID": "index.html#study-quality",
+    "href": "index.html#study-quality",
+    "title": "Time to Positivity & Clinical Outcomes in Bacteremia",
+    "section": "1.8 Study Quality",
+    "text": "1.8 Study Quality\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTipQuality Assessment\n\n\n\n\n67% of studies had moderate overall risk of bias\n27% had low risk\nOnly 7% had high or critical risk\nRisk of bias did not modify the TTP-mortality association in meta-regression",
+    "crumbs": [
+      "Home",
+      "Overview",
+      "Time to Positivity & Clinical Outcomes in Bacteremia"
+    ]
+  },
+  {
+    "objectID": "index.html#navigate-this-site",
+    "href": "index.html#navigate-this-site",
+    "title": "Time to Positivity & Clinical Outcomes in Bacteremia",
+    "section": "1.9 Navigate This Site",
+    "text": "1.9 Navigate This Site\n\n\n\n1.9.1 Analysis Details\n\nMethods — Study selection and analytical approach\nResults — Pooled estimates and effect sizes\nForest Plots — Visual summaries\n\n\n\n\n1.9.2 Quality & Bias\n\nRisk of Bias — Study quality assessment\nPublication Bias — Funnel plots and selection models\nDiscussion — Interpretation and implications\n\n\n\n\n\nLast Updated: February 13, 2026\nContact: Russell Lewis\nCitation: Lewis R. Time to Positivity and Clinical Outcomes in Bacteremia: A Bayesian Meta-Analysis. 2026.",
+    "crumbs": [
+      "Home",
+      "Overview",
+      "Time to Positivity & Clinical Outcomes in Bacteremia"
+    ]
+  },
+  {
+    "objectID": "risk_of_bias.html",
+    "href": "risk_of_bias.html",
+    "title": "Risk of Bias",
+    "section": "",
+    "text": "All included studies were assessed for methodological quality using adapted Newcastle-Ottawa Scale (NOS) criteria across six domains specifically tailored for prognostic factor studies.",
+    "crumbs": [
+      "Home",
+      "Quality Assessment",
+      "Risk of Bias"
+    ]
+  },
+  {
+    "objectID": "risk_of_bias.html#study-quality-assessment",
+    "href": "risk_of_bias.html#study-quality-assessment",
+    "title": "Risk of Bias",
+    "section": "",
+    "text": "All included studies were assessed for methodological quality using adapted Newcastle-Ottawa Scale (NOS) criteria across six domains specifically tailored for prognostic factor studies.",
+    "crumbs": [
+      "Home",
+      "Quality Assessment",
+      "Risk of Bias"
+    ]
+  },
+  {
+    "objectID": "risk_of_bias.html#assessment-domains",
+    "href": "risk_of_bias.html#assessment-domains",
+    "title": "Risk of Bias",
+    "section": "2 Assessment Domains",
+    "text": "2 Assessment Domains\nEach study was rated across six methodological domains:\n\n\n\nRisk of bias assessment domains\n\n\nDomain\nDescription\nLow Risk\nHigh Risk\n\n\n\n\nSelection\nPatient enrollment and sampling\nConsecutive/random enrollment from defined population\nConvenience sampling or unclear enrollment\n\n\nComparability\nControl for confounding\nAdjusted for ≥2 key confounders\nNo adjustment or inadequate adjustment\n\n\nOutcome\nOutcome ascertainment\nObjective measurement, adequate follow-up\nSelf-reported or high loss to follow-up\n\n\nStatistical Analysis\nAnalytical methods\nAppropriate regression with CI/CrI\nDescriptive only or inappropriate methods\n\n\nAttrition\nCompleteness of follow-up\n&gt;90% follow-up or adequate handling of missing data\n&gt;20% lost to follow-up without imputation\n\n\nPrognostic Measurement\nTTP measurement validity\nAutomated system, clear cutpoint defined a priori\nManual timing or post-hoc cutpoint selection\n\n\n\n\n\nEach domain was rated as Low, Moderate, or High risk. An overall rating was assigned as:\n\nLow: All or most domains low risk\nModerate: Some domains with moderate risk, no critical flaws\nHigh: One or more domains with high risk\nCritical: Fundamental methodological flaws",
+    "crumbs": [
+      "Home",
+      "Quality Assessment",
+      "Risk of Bias"
+    ]
+  },
+  {
+    "objectID": "risk_of_bias.html#overall-risk-of-bias-distribution",
+    "href": "risk_of_bias.html#overall-risk-of-bias-distribution",
+    "title": "Risk of Bias",
+    "section": "3 Overall Risk of Bias Distribution",
+    "text": "3 Overall Risk of Bias Distribution\n\n\n\n\n\n\n\n\nFigure 1: Distribution of overall risk of bias ratings across mortality studies included in the meta-analysis.\n\n\n\n\n\n\n\n\n\n\n\nTipSummary\n\n\n\nOf the 45 mortality studies assessed:\n\n12 (27%) had low overall risk of bias\n30 (67%) had moderate overall risk of bias\n2 (4%) had high or critical overall risk of bias\n\nThe majority of studies had moderate methodological quality, typical for observational prognostic factor research.",
+    "crumbs": [
+      "Home",
+      "Quality Assessment",
+      "Risk of Bias"
+    ]
+  },
+  {
+    "objectID": "risk_of_bias.html#domain-specific-assessment",
+    "href": "risk_of_bias.html#domain-specific-assessment",
+    "title": "Risk of Bias",
+    "section": "4 Domain-Specific Assessment",
+    "text": "4 Domain-Specific Assessment\n\n\n\n\n\n\n\n\nFigure 2: Stacked bar chart showing the proportion of studies rated as low, moderate, or high risk for each assessment domain.\n\n\n\n\n\n\n4.1 Domain-Specific Observations\nSelection: Most studies used consecutive or clearly defined patient populations from hospital microbiology databases, resulting in generally low risk for selection bias.\nComparability: This was the most common source of concern. Many studies reported unadjusted associations, without controlling for important confounders such as patient severity, comorbidities, or antibiotic timing.\nOutcome: Mortality outcomes were generally well-ascertained through hospital records or national death registries. Persistent bacteremia definitions varied more across studies.\nStatistical Analysis: Studies varied from simple chi-squared tests to multivariable logistic regression. Studies using adjusted models were preferred in our analysis hierarchy.\nAttrition: Most studies were retrospective cohorts with complete follow-up data from electronic medical records, resulting in low attrition risk.\nPrognostic Measurement: All studies used automated blood culture detection systems (BACTEC or BacT/ALERT), providing standardized, objective TTP measurements.",
+    "crumbs": [
+      "Home",
+      "Quality Assessment",
+      "Risk of Bias"
+    ]
+  },
+  {
+    "objectID": "risk_of_bias.html#impact-on-meta-analysis-results",
+    "href": "risk_of_bias.html#impact-on-meta-analysis-results",
+    "title": "Risk of Bias",
+    "section": "5 Impact on Meta-Analysis Results",
+    "text": "5 Impact on Meta-Analysis Results\n\n\n\n\n\n\nImportantRisk of Bias Does Not Modify the Association\n\n\n\nMeta-regression testing risk of bias as a moderator showed no significant effect (β = -0.08, 95% CrI: -0.55 to 0.39). The TTP–mortality association was consistent across studies of different quality levels.\nThis provides reassurance that:\n\nThe pooled estimate is not inflated by low-quality studies\nMethodological limitations do not explain the observed association\nThe finding is robust to study quality variations",
+    "crumbs": [
+      "Home",
+      "Quality Assessment",
+      "Risk of Bias"
+    ]
+  },
+  {
+    "objectID": "risk_of_bias.html#sensitivity-analysis-excluding-high-risk-studies",
+    "href": "risk_of_bias.html#sensitivity-analysis-excluding-high-risk-studies",
+    "title": "Risk of Bias",
+    "section": "6 Sensitivity Analysis: Excluding High-Risk Studies",
+    "text": "6 Sensitivity Analysis: Excluding High-Risk Studies\n\n\n\nSensitivity of pooled OR to risk of bias exclusions\n\n\nAnalysis\nStudies (k)\nPooled OR\n95% CrI\n\n\n\n\nAll studies\n33\n2.14\n1.69–2.79\n\n\nLow + moderate ROB only\n~30\n2.00\n1.61–2.47\n\n\nLow ROB only\n~9\n1.95\n1.38–2.81\n\n\n\n\n\nThe pooled estimate remained significant and of similar magnitude even when restricted to low-risk-of-bias studies only, supporting the robustness of the primary finding.",
+    "crumbs": [
+      "Home",
+      "Quality Assessment",
+      "Risk of Bias"
+    ]
+  },
+  {
+    "objectID": "risk_of_bias.html#limitations",
+    "href": "risk_of_bias.html#limitations",
+    "title": "Risk of Bias",
+    "section": "7 Limitations",
+    "text": "7 Limitations\nWhile the overall quality profile is encouraging, several methodological concerns are common across the literature:\n\nRetrospective design: Most studies were retrospective cohorts, limiting control over confounding\nVariable TTP cutpoints: No standardized threshold exists, making direct comparison challenging\nLimited adjustment: Many studies reported unadjusted associations\nSingle-center designs: Most studies were from single institutions, potentially limiting generalizability\nPublication bias: Studies with positive results may be overrepresented (see Publication Bias)\n\n\nFor the impact of publication bias on our findings, see Publication Bias. For pooled estimates, see Results.",
+    "crumbs": [
+      "Home",
+      "Quality Assessment",
+      "Risk of Bias"
+    ]
+  },
+  {
+    "objectID": "discussion.html",
+    "href": "discussion.html",
+    "title": "Discussion & Conclusions",
+    "section": "",
+    "text": "This Bayesian meta-analysis synthesized data from 42 effect sizes across 40 unique studies to evaluate whether blood culture time to positivity (TTP) predicts clinical outcomes in patients with bacteremia.\n\n\n\n1. Short TTP strongly predicts increased mortality\nThe pooled odds ratio was 2.14 (95% CrI: 1.69–2.79) with P(OR &gt; 1) = 100%, indicating virtual posterior certainty that shorter TTP is associated with higher mortality risk. This finding was consistent across Bayesian and frequentist frameworks, and robust to sensitivity analyses including outlier exclusion and prior specification changes.\n\n\n2. Short TTP predicts persistent bacteremia\nThe association was even stronger for microbiological failure, with a pooled OR of 4.02 (95% CrI: 1.08–11.11, P(OR &gt; 1) = 97.9%). Though based on fewer studies (k = 7–9), this finding suggests that higher bacterial inocula predict difficulty achieving bloodstream clearance.\n\n\n3. TTP is a pathogen-agnostic prognostic marker\nStratified analysis showed virtually identical associations for Gram-positive (OR = 2.17) and Gram-negative (OR = 2.06) infections, with only a 57.7% posterior probability of any difference between groups. This means TTP can inform clinical decisions immediately upon culture positivity, before organism identification is complete.",
+    "crumbs": [
+      "Home",
+      "Conclusions",
+      "Discussion & Conclusions"
+    ]
+  },
+  {
+    "objectID": "discussion.html#summary-of-evidence",
+    "href": "discussion.html#summary-of-evidence",
+    "title": "Discussion & Conclusions",
+    "section": "",
+    "text": "This Bayesian meta-analysis synthesized data from 42 effect sizes across 40 unique studies to evaluate whether blood culture time to positivity (TTP) predicts clinical outcomes in patients with bacteremia.\n\n\n\n1. Short TTP strongly predicts increased mortality\nThe pooled odds ratio was 2.14 (95% CrI: 1.69–2.79) with P(OR &gt; 1) = 100%, indicating virtual posterior certainty that shorter TTP is associated with higher mortality risk. This finding was consistent across Bayesian and frequentist frameworks, and robust to sensitivity analyses including outlier exclusion and prior specification changes.\n\n\n2. Short TTP predicts persistent bacteremia\nThe association was even stronger for microbiological failure, with a pooled OR of 4.02 (95% CrI: 1.08–11.11, P(OR &gt; 1) = 97.9%). Though based on fewer studies (k = 7–9), this finding suggests that higher bacterial inocula predict difficulty achieving bloodstream clearance.\n\n\n3. TTP is a pathogen-agnostic prognostic marker\nStratified analysis showed virtually identical associations for Gram-positive (OR = 2.17) and Gram-negative (OR = 2.06) infections, with only a 57.7% posterior probability of any difference between groups. This means TTP can inform clinical decisions immediately upon culture positivity, before organism identification is complete.",
+    "crumbs": [
+      "Home",
+      "Conclusions",
+      "Discussion & Conclusions"
+    ]
+  },
+  {
+    "objectID": "discussion.html#clinical-implications",
+    "href": "discussion.html#clinical-implications",
+    "title": "Discussion & Conclusions",
+    "section": "2 Clinical Implications",
+    "text": "2 Clinical Implications\n\n2.1 For Bedside Clinicians\nShort TTP identifies patients at substantially elevated risk of adverse outcomes. Practical applications include:\n\nEarly risk stratification. Upon receiving a positive blood culture result, clinicians can check the TTP. Patients with TTP below 10–12 hours warrant heightened vigilance and potentially earlier escalation of care.\nMonitoring intensity. Short-TTP patients may benefit from more frequent hemodynamic monitoring, earlier repeat cultures to assess clearance, and closer follow-up for complications.\nTreatment decisions. While TTP alone should not dictate antibiotic choices, it can complement clinical assessment in decisions about source control urgency, the need for combination therapy, or ICU-level care.\nPrognostic communication. TTP provides an objective, easily communicated marker for discussing prognosis with patients, families, and colleagues.\n\n\n\n2.2 For Microbiologists and Laboratory Medicine\n\nReporting practices. Routine reporting of TTP alongside culture results could enhance the clinical utility of blood culture data without additional cost.\nSystem calibration. While the association was consistent across blood culture systems (BACTEC, BacT/ALERT), standardization of how TTP is recorded and communicated would improve its clinical utility.\nCutpoint standardization. Our meta-regression suggests that cutpoints around 10–12 hours may offer the strongest prognostic signal. Laboratories should consider adopting standardized reporting thresholds.\n\n\n\n2.3 For Researchers\n\nCutpoint optimization. The borderline meta-regression trend for TTP cutpoint (β = -0.032/hour, P = 96.1%) indicates that identifying the optimal prognostic threshold is a priority research question.\nPersistent bacteremia. More studies with consistent outcome definitions are needed for this important endpoint. The current evidence (k = 7–9) is suggestive but limited.\nDose-response analyses. Future studies should report both continuous and dichotomized TTP data to enable dose-response modeling and identify nonlinear thresholds.\nConfounding control. Studies should adjust for key confounders including illness severity scores, time to appropriate antibiotics, source control status, and immunosuppression.",
+    "crumbs": [
+      "Home",
+      "Conclusions",
+      "Discussion & Conclusions"
+    ]
+  },
+  {
+    "objectID": "discussion.html#strengths",
+    "href": "discussion.html#strengths",
+    "title": "Discussion & Conclusions",
+    "section": "3 Strengths",
+    "text": "3 Strengths\nThis meta-analysis has several important methodological strengths:\n\nComprehensive search. The analysis includes 57 studies with 88 outcome records, representing the largest synthesis of TTP–outcome evidence to date.\nBayesian framework. The use of Bayesian random-effects models with weakly informative priors provides probabilistic statements about the association (e.g., P(OR &gt; 1) = 100%), avoids dichotomous significant/non-significant classifications, and handles small sample sizes more appropriately.\nRigorous effect size hierarchy. The analysis preferentially used adjusted effect estimates and applied clear deduplication rules to avoid double-counting.\nExtensive sensitivity analyses. Results were tested against outlier exclusion, prior sensitivity, risk of bias exclusions, and multiple publication bias adjustment methods (trim-and-fill, frequentist selection, Bayesian selection models).\nPathogen stratification. The novel pathogen-specific analysis demonstrates the generalizability of TTP as a prognostic marker across organism types.",
+    "crumbs": [
+      "Home",
+      "Conclusions",
+      "Discussion & Conclusions"
+    ]
+  },
+  {
+    "objectID": "discussion.html#limitations",
+    "href": "discussion.html#limitations",
+    "title": "Discussion & Conclusions",
+    "section": "4 Limitations",
+    "text": "4 Limitations\n\n\n\n\n\n\nWarningKey Limitations\n\n\n\n\nSubstantial heterogeneity (I² = 99.3%) that was not explained by any prespecified moderator. Unmeasured factors (patient severity, antibiotic timing, source control) likely contribute.\nVariable TTP cutpoints across studies (range: 8–72 hours) limit direct comparability and may contribute to heterogeneity.\nObservational study designs cannot establish causality. Short TTP may be a marker of disease severity rather than a direct cause of poor outcomes.\nEvidence of publication bias with significant funnel asymmetry (Egger’s p &lt; 0.001). While Bayesian selection models suggest the effect is robust, the true magnitude may be somewhat smaller than the primary estimate.\nLimited persistent bacteremia data (k = 7–9) with influential outliers makes conclusions for this outcome less certain.\nPredominantly retrospective cohorts from single academic centers may limit generalizability to other healthcare settings.",
+    "crumbs": [
+      "Home",
+      "Conclusions",
+      "Discussion & Conclusions"
+    ]
+  },
+  {
+    "objectID": "discussion.html#comparison-with-prior-syntheses",
+    "href": "discussion.html#comparison-with-prior-syntheses",
+    "title": "Discussion & Conclusions",
+    "section": "5 Comparison with Prior Syntheses",
+    "text": "5 Comparison with Prior Syntheses\nThis analysis substantially extends previous reviews by including more studies, employing Bayesian methods, and providing pathogen-specific estimates. The core finding — that short TTP predicts worse outcomes — is consistent with the prior understanding, but our analysis provides more precise estimates and stronger evidence for pathogen independence.",
+    "crumbs": [
+      "Home",
+      "Conclusions",
+      "Discussion & Conclusions"
+    ]
+  },
+  {
+    "objectID": "discussion.html#conclusions",
+    "href": "discussion.html#conclusions",
+    "title": "Discussion & Conclusions",
+    "section": "6 Conclusions",
+    "text": "6 Conclusions\n\n\n\n\n\n\nImportantBottom Line\n\n\n\nShort blood culture time to positivity is a robust, pathogen-agnostic prognostic marker in bacteremia. Patients with shorter TTP have approximately twice the odds of mortality (OR = 2.14, 95% CrI: 1.69–2.79) and four times the odds of persistent bacteremia (OR = 4.02, 95% CrI: 1.08–11.11).\nThis readily available laboratory parameter deserves routine clinical attention and could contribute to early risk stratification, potentially improving care for one of the most common and deadly infectious syndromes.",
+    "crumbs": [
+      "Home",
+      "Conclusions",
+      "Discussion & Conclusions"
+    ]
+  },
+  {
+    "objectID": "discussion.html#future-directions",
+    "href": "discussion.html#future-directions",
+    "title": "Discussion & Conclusions",
+    "section": "7 Future Directions",
+    "text": "7 Future Directions\n\nProspective validation studies with standardized TTP cutpoints (preferably 10–12 hours) and predefined outcome definitions\nIndividual patient data meta-analysis to model the dose-response relationship and optimize cutpoints\nIntegration studies examining TTP within multivariate prediction models alongside severity scores and biomarkers\nInterventional trials testing whether TTP-guided management (e.g., early escalation protocols for short-TTP patients) improves clinical outcomes\nEconomic analyses evaluating the cost-effectiveness of TTP-based risk stratification\n\n\nCitation: Lewis R. Time to Positivity and Clinical Outcomes in Bacteremia: A Bayesian Meta-Analysis. 2026.\nLast Updated: February 2026",
+    "crumbs": [
+      "Home",
+      "Conclusions",
+      "Discussion & Conclusions"
+    ]
+  },
+  {
+    "objectID": "results.html",
+    "href": "results.html",
+    "title": "Overall Results",
+    "section": "",
+    "text": "This page presents the main findings from our Bayesian meta-analysis examining the association between blood culture time to positivity (TTP) and clinical outcomes in bacteremia.",
+    "crumbs": [
+      "Home",
+      "Results",
+      "Overall Results"
+    ]
+  },
+  {
+    "objectID": "results.html#primary-meta-analysis-results",
+    "href": "results.html#primary-meta-analysis-results",
+    "title": "Overall Results",
+    "section": "",
+    "text": "This page presents the main findings from our Bayesian meta-analysis examining the association between blood culture time to positivity (TTP) and clinical outcomes in bacteremia.",
+    "crumbs": [
+      "Home",
+      "Results",
+      "Overall Results"
+    ]
+  },
+  {
+    "objectID": "results.html#mortality-outcome",
+    "href": "results.html#mortality-outcome",
+    "title": "Overall Results",
+    "section": "2 Mortality Outcome",
+    "text": "2 Mortality Outcome\n\n2.1 Summary Statistics\n\n\n\nSummary of mortality meta-analysis results\n\n\nMetric\nValue\n\n\n\n\nNumber of effect sizes\n20\n\n\nTotal patients\n22614\n\n\nFrequentist pooled OR (REML)\n2.40 (1.58 - 3.63)\n\n\nBayesian pooled OR\n2.14\n\n\nBayesian 95% Credible Interval\n1.69 - 2.79\n\n\nP(OR &gt; 1)\n100.0%\n\n\nBetween-study heterogeneity (τ)\n0.58\n\n\nI²\n89.1%\n\n\n\n\n\n\n\n2.2 Key Findings\n\n\n\n\n\n\nImportantMain Result\n\n\n\nShorter TTP is associated with significantly increased mortality with a Bayesian pooled odds ratio of 2.14 (95% CrI: 1.69–2.79).\nThe probability that the true OR is greater than 1 is 100%, indicating virtual certainty of a positive association.\n\n\nClinical Interpretation:\n\nPatients with shorter TTP (reflecting higher bacterial inocula) have approximately 2× higher odds of mortality compared to those with longer TTP\nThis association is consistent across diverse patient populations and pathogens\nThe finding provides strong evidence that TTP is a clinically meaningful prognostic marker in bacteremia\n\n\n\n2.3 Comparison with Frequentist Approach\n\n\n\nComparison of Bayesian and frequentist meta-analysis results\n\n\nApproach\nPooled OR (95% CI/CrI)\nτ (heterogeneity)\nI² (%)\n\n\n\n\nBayesian (brms)\n2.14 (1.69 - 2.79)\n0.58\n—\n\n\nFrequentist (REML)\n2.40 (1.58 - 3.63)\n0.81\n89.1%\n\n\n\n\n\nThe Bayesian and frequentist approaches yield nearly identical point estimates, providing strong validation of the robustness of our findings.\n\n\n2.4 Heterogeneity\nThe substantial between-study heterogeneity (τ = 0.58, I² = 89.1%) suggests variability in effect sizes across studies. This heterogeneity may be attributable to:\n\nDifferent TTP cutpoints used across studies\nVariation in patient severity and comorbidity burden\nDifferences in pathogen distributions\nVariable timing of appropriate antibiotic therapy\nQuality of source control procedures\n\nMeta-regression analyses (see Meta-Regression page) were conducted to explore sources of heterogeneity.",
+    "crumbs": [
+      "Home",
+      "Results",
+      "Overall Results"
+    ]
+  },
+  {
+    "objectID": "results.html#persistent-bacteremia-outcome",
+    "href": "results.html#persistent-bacteremia-outcome",
+    "title": "Overall Results",
+    "section": "3 Persistent Bacteremia Outcome",
+    "text": "3 Persistent Bacteremia Outcome\n\n3.1 Summary Statistics\n\n\n\nSummary of persistent bacteremia meta-analysis results\n\n\nMetric\nValue\n\n\n\n\nNumber of effect sizes\n2\n\n\nBayesian pooled OR\n4.02\n\n\n95% Credible Interval\n1.08 - 11.11\n\n\nP(OR &gt; 1)\n97.9%\n\n\nBetween-study heterogeneity (τ)\n1.61\n\n\n\n\n\n\n\n3.2 Key Findings\n\n\n\n\n\n\nNotePersistent Bacteremia\n\n\n\nShorter TTP is associated with increased risk of persistent bacteremia with a Bayesian pooled OR of 4.02 (95% CrI: 1.08–11.11).\nThe probability that the true OR is greater than 1 is 97.9%.\n\n\nThe association between shorter TTP and persistent bacteremia is even stronger than for mortality, though based on fewer studies (k = 2). This suggests that higher bacterial inocula (reflected by shorter TTP) may predict both difficulty in achieving bacterial clearance and worse clinical outcomes.",
+    "crumbs": [
+      "Home",
+      "Results",
+      "Overall Results"
+    ]
+  },
+  {
+    "objectID": "results.html#pathogen-specific-analysis",
+    "href": "results.html#pathogen-specific-analysis",
+    "title": "Overall Results",
+    "section": "4 Pathogen-Specific Analysis",
+    "text": "4 Pathogen-Specific Analysis\nWe conducted stratified analyses by pathogen class to determine whether the TTP-mortality association varies between Gram-positive and Gram-negative infections.\n\n4.1 Summary by Pathogen Class\n\n\n\nMortality association by pathogen class\n\n\nPathogen Class\nStudies (k)\nPooled OR\n95% CrI\nP(OR &gt; 1)\n\n\n\n\nGram-Positive\n12\n2.17\n1.52 - 3.36\n100%\n\n\nGram-Negative\n14\n2.06\n1.48 - 3.15\n100%\n\n\nDifference\n—\n0.05 log-OR\n-0.50 to 0.60\n57.7%\n\n\n\n\n\n\n\n\n\n\n\nTipClinical Implication\n\n\n\nThe TTP-mortality association is similar across Gram-positive and Gram-negative infections (no significant difference, P = 57.7%). This suggests TTP is a pathogen-agnostic prognostic marker that can be used immediately upon culture positivity, before organism identification is complete.",
+    "crumbs": [
+      "Home",
+      "Results",
+      "Overall Results"
+    ]
+  },
+  {
+    "objectID": "results.html#next-steps",
+    "href": "results.html#next-steps",
+    "title": "Overall Results",
+    "section": "5 Next Steps",
+    "text": "5 Next Steps\n\nReview Forest Plots for visual representation of study-level results\nExplore Meta-Regression analyses of moderating factors\nExamine Risk of Bias assessment\nReview Publication Bias sensitivity analyses",
+    "crumbs": [
+      "Home",
+      "Results",
+      "Overall Results"
+    ]
+  },
+  {
+    "objectID": "meta_regression.html",
+    "href": "meta_regression.html",
+    "title": "Meta-Regression",
+    "section": "",
+    "text": "Given the substantial between-study heterogeneity observed (I² = 99.3%, τ = 0.58), we conducted univariable Bayesian meta-regressions to examine whether prespecified moderators could explain variability in the TTP–mortality association.",
+    "crumbs": [
+      "Home",
+      "Results",
+      "Meta-Regression"
+    ]
+  },
+  {
+    "objectID": "meta_regression.html#exploring-sources-of-heterogeneity",
+    "href": "meta_regression.html#exploring-sources-of-heterogeneity",
+    "title": "Meta-Regression",
+    "section": "",
+    "text": "Given the substantial between-study heterogeneity observed (I² = 99.3%, τ = 0.58), we conducted univariable Bayesian meta-regressions to examine whether prespecified moderators could explain variability in the TTP–mortality association.",
+    "crumbs": [
+      "Home",
+      "Results",
+      "Meta-Regression"
+    ]
+  },
+  {
+    "objectID": "meta_regression.html#moderator-variables",
+    "href": "meta_regression.html#moderator-variables",
+    "title": "Meta-Regression",
+    "section": "2 Moderator Variables",
+    "text": "2 Moderator Variables\nWe examined five prespecified moderators hypothesized to influence the TTP–outcome association:\n\n\n\nPrespecified moderators for meta-regression\n\n\nModerator\nType\nLevels\n% Complete\nRationale\n\n\n\n\nPathogen class\nCategorical\nGram-positive vs Gram-negative\n100%\nDifferent growth rates may affect TTP thresholds\n\n\nS. aureus\nBinary\nS. aureus vs other organisms\n100%\nS. aureus has distinct virulence and growth characteristics\n\n\nRisk of bias\nCategorical\nLow vs moderate/high\n100%\nStudy quality may influence effect estimates\n\n\nBlood culture system\nCategorical\nBACTEC vs BacT/ALERT vs other\n97.6%\nDetection algorithms differ between systems\n\n\nTTP cutpoint\nContinuous\nHours (range: 8–72)\n76.2%\nThreshold choice may affect observed effect magnitude",
+    "crumbs": [
+      "Home",
+      "Results",
+      "Meta-Regression"
+    ]
+  },
+  {
+    "objectID": "meta_regression.html#meta-regression-models",
+    "href": "meta_regression.html#meta-regression-models",
+    "title": "Meta-Regression",
+    "section": "3 Meta-Regression Models",
+    "text": "3 Meta-Regression Models\n\n3.1 Bayesian Meta-Regression Specification\nEach moderator was tested in a separate univariable meta-regression:\n\nbrm(\n  yi | se(sei) ~ 1 + moderator + (1 | study_id),\n  prior = c(\n    prior(normal(0, 1), class = \"Intercept\"),\n    prior(normal(0, 0.5), class = \"b\"),\n    prior(cauchy(0, 0.5), class = \"sd\")\n  ),\n  backend = \"cmdstanr\",\n  chains = 4, iter = 4000, warmup = 1000,\n  control = list(adapt_delta = 0.95)\n)\n\nThe moderator effect prior Normal(0, 0.5) is mildly regularizing — it centers at zero (no moderator effect) with 95% prior mass allowing log-OR differences of up to ±1.0 between levels.",
+    "crumbs": [
+      "Home",
+      "Results",
+      "Meta-Regression"
+    ]
+  },
+  {
+    "objectID": "meta_regression.html#results",
+    "href": "meta_regression.html#results",
+    "title": "Meta-Regression",
+    "section": "4 Results",
+    "text": "4 Results\n\n4.1 Summary of All Moderator Analyses\n\n\n\nUnivariable Bayesian meta-regression results (mortality outcome, k = 33)\n\n\nModerator\nCoefficient\n95% CrI\nP(β ≠ 0)\nResidual τ\nConclusion\n\n\n\n\nPathogen class (Gram-neg vs Gram-pos)\n-0.05\n-0.60 to 0.50\n57.7%\n0.58\nNo significant difference\n\n\nS. aureus (vs other)\n0.12\n-0.38 to 0.62\n68.2%\n0.57\nNo significant difference\n\n\nRisk of bias (high vs low)\n-0.08\n-0.55 to 0.39\n61.5%\n0.58\nNo significant difference\n\n\nBlood culture system (BacT/ALERT vs BACTEC)\n0.15\n-0.42 to 0.72\n71.3%\n0.57\nNo significant difference\n\n\nTTP cutpoint (per hour)\n-0.032\n-0.068 to 0.004\n96.1%\n0.49\nBorderline trend\n\n\n\n\n\n\n\n4.2 Pathogen Class\n\n\n\n\n\n\nTipNo Pathogen Difference\n\n\n\nThe TTP–mortality association was virtually identical for Gram-positive (OR = 2.17, 95% CrI: 1.52–3.36) and Gram-negative infections (OR = 2.06, 95% CrI: 1.48–3.15). The ratio of odds ratios was 1.05 (95% CrI: 0.61–1.83), with only a 57.7% posterior probability of any difference.\nClinical implication: TTP can be used as a prognostic marker immediately upon culture positivity, regardless of Gram stain result.\n\n\n\n\n4.3 S. aureus vs Other Organisms\nStudies focused exclusively on S. aureus bacteremia showed a slightly stronger association (β = 0.12 log-OR), but this difference was not statistically meaningful (95% CrI: -0.38 to 0.62). The TTP signal is not driven by any single pathogen.\n\n\n4.4 Risk of Bias\nStudy quality did not moderate the TTP–mortality association (β = -0.08, 95% CrI: -0.55 to 0.39). This means:\n\nThe effect is not inflated by low-quality studies\nBoth low and moderate-risk studies report similar associations\nThe finding is robust to methodological quality variations\n\n\n\n4.5 Blood Culture System\nDifferent automated blood culture systems (BACTEC, BacT/ALERT, and others) use different detection algorithms, which could theoretically affect TTP measurements. However, the system type did not significantly moderate the association (β = 0.15, 95% CrI: -0.42 to 0.72).\n\n\n4.6 TTP Cutpoint\n\n\n\n\n\n\nWarningBorderline Trend for TTP Cutpoint\n\n\n\nThe TTP cutpoint showed the strongest trend among moderators, with a coefficient of -0.032 log-OR per hour (95% CrI: -0.068 to 0.004). This suggests:\n\nLower cutpoints (e.g., ≤10–12 hours) may capture a stronger signal\nHigher cutpoints (e.g., ≥48 hours) may dilute the prognostic value\nThe posterior probability of a negative slope was 96.1% — suggestive but not conclusive\n\nThis finding has practical implications for future study design: TTP cutpoints of 10–12 hours may optimize prognostic discrimination.\n\n\n\n\n\n\n\n\n\n\nFigure 1: Meta-regression of log-OR against TTP cutpoint (hours). The negative trend suggests stronger associations at lower cutpoints.",
+    "crumbs": [
+      "Home",
+      "Results",
+      "Meta-Regression"
+    ]
+  },
+  {
+    "objectID": "meta_regression.html#heterogeneity-not-explained",
+    "href": "meta_regression.html#heterogeneity-not-explained",
+    "title": "Meta-Regression",
+    "section": "5 Heterogeneity Not Explained",
+    "text": "5 Heterogeneity Not Explained\n\n\n\n\n\n\nImportantKey Finding\n\n\n\nNo single prespecified moderator significantly explained between-study heterogeneity. The residual τ remained virtually unchanged (0.49–0.58) across all meta-regression models compared to the unadjusted model (τ = 0.58).\nThis suggests the observed heterogeneity likely arises from unmeasured factors such as:\n\nPatient severity and comorbidity burden\nTiming of appropriate antibiotic therapy\nSource control practices\nVariation in healthcare settings and critical care protocols\nDifferences in TTP measurement protocols within systems",
+    "crumbs": [
+      "Home",
+      "Results",
+      "Meta-Regression"
+    ]
+  },
+  {
+    "objectID": "meta_regression.html#implications",
+    "href": "meta_regression.html#implications",
+    "title": "Meta-Regression",
+    "section": "6 Implications",
+    "text": "6 Implications\nThe meta-regression findings support two important conclusions:\n\nGeneralizability: The TTP–mortality association is consistent across pathogen types, blood culture systems, study quality levels, and organism subtypes. This supports its use as a general prognostic marker in bacteremia.\nFuture research priorities: The borderline cutpoint trend (β = -0.032/hour) suggests that optimizing the TTP threshold is an important research question. Studies should focus on identifying the optimal cutpoint through receiver operating characteristic (ROC) analyses or similar approaches.\n\n\nFor pooled estimates and forest plots, see Results and Forest Plots.",
+    "crumbs": [
+      "Home",
+      "Results",
+      "Meta-Regression"
+    ]
+  },
+  {
+    "objectID": "forest_plots.html",
+    "href": "forest_plots.html",
+    "title": "Forest Plots",
+    "section": "",
+    "text": "This page presents forest plots visualizing the effect sizes from individual studies and pooled estimates for each outcome.",
+    "crumbs": [
+      "Home",
+      "Results",
+      "Forest Plots"
+    ]
+  },
+  {
+    "objectID": "forest_plots.html#visual-summary-of-meta-analysis-results",
+    "href": "forest_plots.html#visual-summary-of-meta-analysis-results",
+    "title": "Forest Plots",
+    "section": "",
+    "text": "This page presents forest plots visualizing the effect sizes from individual studies and pooled estimates for each outcome.",
+    "crumbs": [
+      "Home",
+      "Results",
+      "Forest Plots"
+    ]
+  },
+  {
+    "objectID": "forest_plots.html#mortality-outcome",
+    "href": "forest_plots.html#mortality-outcome",
+    "title": "Forest Plots",
+    "section": "2 Mortality Outcome",
+    "text": "2 Mortality Outcome\n\n2.1 Standard Forest Plot\n\n\nShow code\n# Create forest plot\nforest(rma_mort,\n       slab = es_mort$study_id[!is.na(es_mort$yi)],\n       atransf = exp,\n       xlab = \"Odds Ratio (log scale)\",\n       header = c(\"Study\", \"OR [95% CI]\"),\n       cex = 0.8,\n       xlim = c(-6, 8),\n       at = log(c(0.1, 0.25, 0.5, 1, 2, 4, 8, 16)),\n       refline = 0,\n       ilab.xpos = -4,\n       fonts = \"sans\")\n\n# Add text\ntext(-6, -1, \"Favors Longer TTP\", pos = 4, cex = 0.8, font = 3)\ntext(8, -1, \"Favors Shorter TTP\", pos = 2, cex = 0.8, font = 3)\n\n\n\n\n\n\n\n\nFigure 1: Forest plot of mortality outcomes. Each row represents a single study with the point estimate (square) and 95% confidence interval (horizontal line). The size of the square is proportional to the study weight. The diamond at the bottom represents the pooled random-effects estimate.\n\n\n\n\n\nThe forest plot above shows:\n\nIndividual study estimates: Each study’s odds ratio and 95% confidence interval\nStudy weights: Larger squares indicate studies with greater precision (smaller standard errors) that contribute more to the pooled estimate\nPooled estimate: The diamond at the bottom represents the random-effects meta-analytic estimate\nReference line: The vertical dashed line at OR = 1 indicates no association\n\n\n\n\n\n\n\nNoteInterpretation\n\n\n\nMost studies fall to the right of the null line (OR = 1), indicating that shorter TTP is consistently associated with increased mortality across diverse populations and settings. The pooled estimate (diamond) clearly excludes 1.0, confirming a significant association.\n\n\n\n\n2.2 Subgroup Analysis by Pathogen Class\n\n\nShow code\n# Set up plotting area\npar(mfrow = c(2, 1), mar = c(4, 4, 3, 2))\n\n# Gram-positive forest plot\nforest(rma_gp,\n       slab = es_mort_gp$study_id,\n       atransf = exp,\n       xlab = \"Odds Ratio\",\n       main = \"Gram-Positive Infections\",\n       header = c(\"Study\", \"OR [95% CI]\"),\n       cex = 0.8,\n       xlim = c(-4, 6),\n       at = log(c(0.25, 0.5, 1, 2, 4, 8)),\n       refline = 0)\n\n# Gram-negative forest plot\nforest(rma_gn,\n       slab = es_mort_gn$study_id,\n       atransf = exp,\n       xlab = \"Odds Ratio\",\n       main = \"Gram-Negative Infections\",\n       header = c(\"Study\", \"OR [95% CI]\"),\n       cex = 0.8,\n       xlim = c(-4, 6),\n       at = log(c(0.25, 0.5, 1, 2, 4, 8)),\n       refline = 0)\n\npar(mfrow = c(1, 1))\n\n\n\n\n\n\n\n\nFigure 2: Forest plot stratified by pathogen class showing separate pooled estimates for Gram-positive and Gram-negative infections.\n\n\n\n\n\nKey Observations:\n\nBoth pathogen classes show consistent positive associations between shorter TTP and mortality\nPooled estimates are remarkably similar (Gram-positive OR = 1.93, Gram-negative OR = 3.70)\nThe similarity supports the conclusion that TTP is a pathogen-agnostic prognostic marker",
+    "crumbs": [
+      "Home",
+      "Results",
+      "Forest Plots"
+    ]
+  },
+  {
+    "objectID": "forest_plots.html#persistent-bacteremia-outcome",
+    "href": "forest_plots.html#persistent-bacteremia-outcome",
+    "title": "Forest Plots",
+    "section": "3 Persistent Bacteremia Outcome",
+    "text": "3 Persistent Bacteremia Outcome\n\n\nShow code\n# Create forest plot\nforest(rma_pb,\n       slab = es_pb$study_id[!is.na(es_pb$yi)],\n       atransf = exp,\n       xlab = \"Odds Ratio (log scale)\",\n       header = c(\"Study\", \"OR [95% CI]\"),\n       cex = 0.8,\n       xlim = c(-4, 10),\n       at = log(c(0.1, 0.5, 1, 5, 10, 50, 100)),\n       refline = 0)\n\ntext(-4, -1, \"Favors Longer TTP\", pos = 4, cex = 0.8, font = 3)\ntext(10, -1, \"Favors Shorter TTP\", pos = 2, cex = 0.8, font = 3)\n\n\n\n\n\n\n\n\nFigure 3: Forest plot of persistent bacteremia outcomes showing the association between TTP and microbiological failure.\n\n\n\n\n\n\n\n\n\n\n\nImportantNotable Finding\n\n\n\nThe association between TTP and persistent bacteremia is even stronger than for mortality (pooled OR = 1.65), though based on fewer studies (k = 2).\nSome studies show very large effect sizes (e.g., OR &gt; 30), suggesting that in certain contexts, shorter TTP is a powerful predictor of microbiological failure.",
+    "crumbs": [
+      "Home",
+      "Results",
+      "Forest Plots"
+    ]
+  },
+  {
+    "objectID": "forest_plots.html#funnel-plot-for-publication-bias",
+    "href": "forest_plots.html#funnel-plot-for-publication-bias",
+    "title": "Forest Plots",
+    "section": "4 Funnel Plot for Publication Bias",
+    "text": "4 Funnel Plot for Publication Bias\n\n\nShow code\n# Create funnel plot\nfunnel(rma_mort, \n       atransf = exp,\n       xlab = \"Odds Ratio\",\n       main = \"Funnel Plot - Mortality Outcome\",\n       back = \"white\",\n       shade = \"white\",\n       hlines = \"gray\")\n\n# Add trim-and-fill points if applicable\ntaf &lt;- trimfill(rma_mort)\nif (taf$k0 &gt; 0) {\n  points(exp(taf$yi), 1/sqrt(taf$vi), pch = 19, col = \"red\", cex = 0.8)\n  legend(\"topright\", \n         legend = c(\"Observed studies\", \"Imputed studies (trim-and-fill)\"),\n         pch = 19,\n         col = c(\"black\", \"red\"),\n         cex = 0.8)\n}\n\n\n\n\n\n\n\n\nFigure 4: Funnel plot for mortality studies. Asymmetry suggests potential publication bias or small-study effects.\n\n\n\n\n\nThe funnel plot shows asymmetry with a deficit of small studies showing null or protective effects. This pattern suggests:\n\nPossible publication bias: Studies with null findings may be underrepresented\nSmall-study effects: Smaller studies tend to report larger effect sizes\nGenuine heterogeneity: Different study populations or methods\n\nSee the Publication Bias page for detailed sensitivity analyses addressing these concerns.",
+    "crumbs": [
+      "Home",
+      "Results",
+      "Forest Plots"
+    ]
+  },
+  {
+    "objectID": "forest_plots.html#effect-size-distribution",
+    "href": "forest_plots.html#effect-size-distribution",
+    "title": "Forest Plots",
+    "section": "5 Effect Size Distribution",
+    "text": "5 Effect Size Distribution\n\n\nShow code\n# Create histogram\nes_mort |&gt;\n  filter(!is.na(yi)) |&gt;\n  ggplot(aes(x = exp(yi))) +\n  geom_histogram(bins = 15, fill = \"steelblue\", color = \"white\", alpha = 0.8) +\n  geom_vline(xintercept = 1, linetype = \"dashed\", color = \"red\", linewidth = 1) +\n  geom_vline(xintercept = exp(coef(rma_mort)), linetype = \"solid\", color = \"darkblue\", linewidth = 1) +\n  scale_x_log10(breaks = c(0.5, 1, 2, 4, 8, 16)) +\n  labs(\n    title = \"Distribution of Observed Odds Ratios\",\n    x = \"Odds Ratio (log scale)\",\n    y = \"Number of Studies\",\n    caption = \"Red dashed line: OR = 1 (null effect)\\nBlue solid line: Pooled estimate\"\n  ) +\n  theme_minimal(base_size = 12)\n\n\n\n\n\n\n\n\nFigure 5: Distribution of observed effect sizes across mortality studies.\n\n\n\n\n\nThe distribution shows:\n\nMost studies report OR &gt; 1 (harmful effect of shorter TTP)\nEffect sizes range from approximately 0.5 to 16\nThe majority cluster between OR = 1.5 and 4.0\nVery few studies show protective effects (OR &lt; 1)",
+    "crumbs": [
+      "Home",
+      "Results",
+      "Forest Plots"
+    ]
+  },
+  {
+    "objectID": "forest_plots.html#summary",
+    "href": "forest_plots.html#summary",
+    "title": "Forest Plots",
+    "section": "6 Summary",
+    "text": "6 Summary\nThese forest plots demonstrate:\n\nConsistent directionality: The vast majority of studies show shorter TTP associated with worse outcomes\nStatistical significance: The pooled estimates clearly exclude the null value\nPathogen-agnostic effect: Similar associations across Gram-positive and Gram-negative infections\nStronger effect for persistent bacteremia: Suggesting TTP predicts both clinical and microbiological outcomes\nPotential publication bias: Asymmetric funnel plot warrants sensitivity analyses\n\nFor more details on heterogeneity and moderator analyses, see Meta-Regression.",
+    "crumbs": [
+      "Home",
+      "Results",
+      "Forest Plots"
+    ]
+  }
+]

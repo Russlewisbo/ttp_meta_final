@@ -23,22 +23,22 @@ knitr::opts_knit$set(root.dir = here::here())
 #| cache: true
 
 # Load data
-tbl_study <- read_excel("TTP_MetaAnalysis_Extraction_Complete.xlsx", sheet = "tbl_study")
-tbl_population <- read_excel("TTP_MetaAnalysis_Extraction_Complete.xlsx", sheet = "tbl_population")
-tbl_outcomes <- read_excel("TTP_MetaAnalysis_Extraction_Complete.xlsx", sheet = "tbl_outcomes")
+tbl_study <- read_excel("../TTP_MetaAnalysis_Extraction_Complete.xlsx", sheet = "tbl_study")
+tbl_population <- read_excel("../TTP_MetaAnalysis_Extraction_Complete.xlsx", sheet = "tbl_population")
+tbl_outcomes <- read_excel("../TTP_MetaAnalysis_Extraction_Complete.xlsx", sheet = "tbl_outcomes")
 
 # Clean and prepare mortality data
 outcomes_clean <- tbl_outcomes |>
   filter(outcome_type == "mortality") |>
-  filter(!is.na(n_ttp_short_outcome_yes) | !is.na(or_reported))
+  filter(!is.na(events_short_ttp) | !is.na(effect_estimate))
 
 # Calculate effect sizes
 es_mort <- escalc(
   measure = "OR",
-  ai = n_ttp_short_outcome_yes,
-  bi = n_ttp_short_outcome_no,
-  ci = n_ttp_long_outcome_yes,
-  di = n_ttp_long_outcome_no,
+  ai = events_short_ttp,
+  bi = n_short_ttp - events_short_ttp,
+  ci = events_long_ttp,
+  di = n_long_ttp - events_long_ttp,
   data = outcomes_clean,
   slab = study_id
 )
@@ -158,14 +158,14 @@ par(mfrow = c(1, 1))
 # Prepare persistent bacteremia data
 pb_clean <- tbl_outcomes |>
   filter(outcome_type == "persistent_bacteremia") |>
-  filter(!is.na(n_ttp_short_outcome_yes))
+  filter(!is.na(events_short_ttp))
 
 es_pb <- escalc(
   measure = "OR",
-  ai = n_ttp_short_outcome_yes,
-  bi = n_ttp_short_outcome_no,
-  ci = n_ttp_long_outcome_yes,
-  di = n_ttp_long_outcome_no,
+  ai = events_short_ttp,
+  bi = n_short_ttp - events_short_ttp,
+  ci = events_long_ttp,
+  di = n_long_ttp - events_long_ttp,
   data = pb_clean,
   slab = study_id
 )

@@ -100,7 +100,7 @@ tbl_outcomes   <- read_excel(path, sheet = "tbl_outcomes") |> clean_names()
 - **Prior sensitivity:** OR range 1.99–2.15 (±4%) — insensitive to prior choice
 - **Meta-regression:** No moderator explained heterogeneity (pathogen class, S. aureus, ROB, blood culture system)
 
-### Persistent Bacteremia (k=7)
+### Persistent Bacteremia (k=7-9)
 
 | Analysis | Pooled OR | 95% CI/CrI | tau |
 |----------|-----------|------------|-----|
@@ -111,6 +111,20 @@ tbl_outcomes   <- read_excel(path, sheet = "tbl_outcomes") |> clean_names()
 - **P(OR > 1) = 97.9%** — strong but not decisive
 - Estimate heavily influenced by **Melling2019** (OR=37) and **Kassis2009** (OR=75) — sparse 2×2 cells
 - **Prior sensitivity:** OR range 1.38–5.84 — more sensitive than mortality (small k)
+
+### Pathogen-Specific Analysis (COMPLETED 2026-02-14)
+
+Stratified mortality analysis by pathogen class:
+
+| Pathogen Class | k | Pooled OR | 95% CrI | P(OR > 1) | τ |
+|----------------|---|-----------|---------|-----------|---|
+| **Gram-Positive** | 12 | 2.17 | 1.52–3.36 | 100% | 0.47 |
+| **Gram-Negative** | 14 | 2.06 | 1.48–3.15 | 100% | 0.49 |
+| **Difference** | — | 0.05 log-OR | -0.50 to 0.60 | 57.7% | — |
+
+**Key Finding:** No significant difference between pathogen classes (ratio of ORs = 1.05, 95% CrI: 0.61–1.83). TTP is a **pathogen-agnostic prognostic marker** that works equally well for Gram-positive and Gram-negative BSI.
+
+**Clinical Implication:** TTP can be used immediately upon culture positivity as an early warning sign, even before organism identification is complete.
 
 ## Bayesian Model Specification
 

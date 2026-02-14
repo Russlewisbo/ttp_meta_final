@@ -267,38 +267,38 @@
         <div class="content">
             <div class="intro">
                 <h2>📊 Project Overview</h2>
-                <p>This project presents a comprehensive Bayesian meta-analysis examining the association between blood culture time-to-positivity (TTP) and clinical outcomes in bacteremia patients. The analysis includes 20 studies with structured data extraction and rigorous statistical methods.</p>
+                <p>This project presents a comprehensive Bayesian meta-analysis examining the association between blood culture time-to-positivity (TTP) and clinical outcomes in bacteremia patients. The analysis includes 42 effect sizes from 40 unique studies with structured data extraction and rigorous statistical methods.</p>
             </div>
             
             <div class="key-findings">
                 <h2>🎯 Key Findings</h2>
                 <div class="finding-highlight">
-                    <strong>Primary Result:</strong> Shorter TTP is strongly associated with increased mortality (OR = 2.43 for short vs long TTP, 95% CrI: 1.38-4.20, 99.8% probability that short TTP is harmful)
+                    <strong>Primary Result:</strong> Shorter TTP is strongly associated with increased mortality (OR = 2.14, 95% CrI: 1.69–2.79, P(OR &gt; 1) = 100%)
                 </div>
                 <div class="finding-highlight">
-                    <strong>Critical Discovery:</strong> TTP cutpoint choice significantly affects observed effect size (-0.032 log-OR per hour, 98.6% probability). At low cutpoints (10h), very rapid growth (short TTP) shows strong mortality association (OR ≈ 2.5). At high cutpoints (72h), the effect attenuates (OR ≈ 0.4).
+                    <strong>Critical Discovery:</strong> TTP is a pathogen-agnostic prognostic marker — virtually identical associations for Gram-positive (OR = 2.17) and Gram-negative (OR = 2.06) infections. TTP can inform decisions before organism identification.
                 </div>
                 <div class="finding-highlight">
-                    <strong>Robustness:</strong> The short-TTP mortality effect is consistent across pathogen types, data sources, and study designs. Not due to confounding. Stable over 10+ years.
+                    <strong>Robustness:</strong> The effect is consistent across all Bayesian sensitivity analyses, prior specifications, and publication bias adjustments. Persistent bacteremia shows an even stronger signal (OR = 4.02).
                 </div>
             </div>
             
             <div class="stats-grid">
                 <div class="stat-box">
-                    <span class="stat-number">20</span>
-                    <span class="stat-label">Studies in Database</span>
+                    <span class="stat-number">40</span>
+                    <span class="stat-label">Unique Studies Analyzed</span>
                 </div>
                 <div class="stat-box">
-                    <span class="stat-number">12</span>
-                    <span class="stat-label">Studies in Mortality Analysis</span>
+                    <span class="stat-number">33</span>
+                    <span class="stat-label">Mortality Effect Sizes</span>
                 </div>
                 <div class="stat-box">
-                    <span class="stat-number">2.43</span>
+                    <span class="stat-number">2.14</span>
                     <span class="stat-label">Pooled Odds Ratio</span>
                 </div>
                 <div class="stat-box">
-                    <span class="stat-number">99.8%</span>
-                    <span class="stat-label">P(short TTP harmful)</span>
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">P(OR &gt; 1)</span>
                 </div>
             </div>
             
@@ -308,7 +308,7 @@
                 <div class="report-card primary">
                     <span class="badge primary">⭐ PRIMARY REPORT</span>
                     <h3>Mortality Meta-Analysis</h3>
-                    <p>Comprehensive Bayesian meta-analysis of TTP and mortality outcomes. Includes 12 studies, subgroup analyses, moderator exploration, and sensitivity analyses.</p>
+                    <p>Comprehensive Bayesian meta-analysis of TTP and mortality outcomes. Includes 33 effect sizes from 31 studies, pathogen subgroup analyses, moderator exploration, and sensitivity analyses.</p>
                     <ul>
                         <li>Pooled effect estimation</li>
                         <li>Forest plots & visualizations</li>
@@ -339,7 +339,7 @@
                 <h2 style="color: var(--primary-color); margin-bottom: 1rem;">💊 Clinical Implications</h2>
                 <div style="display: grid; gap: 1rem;">
                     <div style="background: white; padding: 1rem; border-radius: 8px;">
-                        <strong>For Clinicians:</strong> Short TTP identifies high-risk bacteremia patients. Use TTP for risk stratification regardless of gram stain result. Patients with TTP <10-12h are at ~2.4× higher risk and warrant closer monitoring.
+                        <strong>For Clinicians:</strong> Short TTP identifies high-risk bacteremia patients. Use TTP for risk stratification regardless of gram stain result. Patients with TTP &lt;10-12h are at ~2× higher odds of mortality and warrant closer monitoring.
                     </div>
                     <div style="background: white; padding: 1rem; border-radius: 8px;">
                         <strong>For Researchers:</strong> Standardize TTP cutpoints in future studies (recommend 10-12h). Report both continuous and dichotomized data. More studies needed on clinical failure outcomes with consistent definitions.
@@ -360,5 +360,12 @@
                 </ul>
             </div>
         </div>
-        
+
+        <footer>
+            <p>© 2026 Russell Lewis | <a href="website/index.qmd">Full Interactive Website</a></p>
+            <p style="font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.7;">Built with Quarto & R | Bayesian analyses with brms & Stan</p>
+        </footer>
+    </div>
+</body>
+</html>
 

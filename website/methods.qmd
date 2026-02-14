@@ -29,7 +29,7 @@ library(janitor)
 library(gt)
 library(knitr)
 
-path <- "/Users/russelllewis/Desktop/ttp_meta_final/TTP_MetaAnalysis_Extraction_Complete.xlsx"
+path <- "../TTP_MetaAnalysis_Extraction_Complete.xlsx"
 ```
 
 ```{r}
@@ -195,11 +195,7 @@ brm(
 
 To address limitations of frequentist selection models with sparse non-significant studies, we implemented a fully Bayesian step-function selection model in Stan:
 
-```{stan}
-#| eval: false
-#| output: asis
-#| code-fold: false
-
+```stan
 model {
   // Priors
   mu ~ normal(0, 1);
