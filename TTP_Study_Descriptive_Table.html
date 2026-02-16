@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<style>body{background-color:white;}</style>
+
+
+</head>
+<body>
+<div id="itnrlgtlyd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+  <style>#itnrlgtlyd table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#itnrlgtlyd thead, #itnrlgtlyd tbody, #itnrlgtlyd tfoot, #itnrlgtlyd tr, #itnrlgtlyd td, #itnrlgtlyd th {
+  border-style: none;
+}
+
+#itnrlgtlyd p {
+  margin: 0;
+  padding: 0;
+}
+
+#itnrlgtlyd .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#itnrlgtlyd .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#itnrlgtlyd .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#itnrlgtlyd .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#itnrlgtlyd .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#itnrlgtlyd .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#itnrlgtlyd .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#itnrlgtlyd .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#itnrlgtlyd .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#itnrlgtlyd .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#itnrlgtlyd .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#itnrlgtlyd .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#itnrlgtlyd .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#itnrlgtlyd .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#itnrlgtlyd .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#itnrlgtlyd .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#itnrlgtlyd .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#itnrlgtlyd .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#itnrlgtlyd .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#itnrlgtlyd .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#itnrlgtlyd .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#itnrlgtlyd .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#itnrlgtlyd .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#itnrlgtlyd .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#itnrlgtlyd .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#itnrlgtlyd .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#itnrlgtlyd .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#itnrlgtlyd .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#itnrlgtlyd .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#itnrlgtlyd .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#itnrlgtlyd .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#itnrlgtlyd .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#itnrlgtlyd .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#itnrlgtlyd .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#itnrlgtlyd .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#itnrlgtlyd .gt_left {
+  text-align: left;
+}
+
+#itnrlgtlyd .gt_center {
+  text-align: center;
+}
+
+#itnrlgtlyd .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#itnrlgtlyd .gt_font_normal {
+  font-weight: normal;
+}
+
+#itnrlgtlyd .gt_font_bold {
+  font-weight: bold;
+}
+
+#itnrlgtlyd .gt_font_italic {
+  font-style: italic;
+}
+
+#itnrlgtlyd .gt_super {
+  font-size: 65%;
+}
+
+#itnrlgtlyd .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#itnrlgtlyd .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#itnrlgtlyd .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#itnrlgtlyd .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#itnrlgtlyd .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#itnrlgtlyd .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#itnrlgtlyd .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#itnrlgtlyd .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#itnrlgtlyd div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+  <table class="gt_table" style="table-layout:fixed;width:0px;" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <colgroup>
+    <col style="width:120px;"/>
+    <col style="width:100px;"/>
+    <col style="width:140px;"/>
+    <col style="width:60px;"/>
+    <col style="width:100px;"/>
+    <col style="width:140px;"/>
+    <col style="width:180px;"/>
+    <col style="width:80px;"/>
+    <col style="width:90px;"/>
+  </colgroup>
+  <thead>
+    <tr class="gt_heading">
+      <td colspan="9" class="gt_heading gt_title gt_font_normal" style>Descriptive Summary of Studies Included in TTP Meta-Analysis</td>
+    </tr>
+    <tr class="gt_heading">
+      <td colspan="9" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>Total studies: 54 | Data extracted through February 2026</td>
+    </tr>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-weight: bold; background-color: #F0F0F0;" scope="col" id="Author-(Year)">Author (Year)</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-weight: bold; background-color: #F0F0F0;" scope="col" id="Country">Country</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-weight: bold; background-color: #F0F0F0;" scope="col" id="Study-Design">Study Design</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-weight: bold; background-color: #F0F0F0;" scope="col" id="N">N</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-weight: bold; background-color: #F0F0F0;" scope="col" id="Pathogen-Class">Pathogen Class</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-weight: bold; background-color: #F0F0F0;" scope="col" id="Specific-Pathogen">Specific Pathogen</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-weight: bold; background-color: #F0F0F0;" scope="col" id="Main-Outcome(s)">Main Outcome(s)</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-weight: bold; background-color: #F0F0F0;" scope="col" id="TTP-Cutoff">TTP Cutoff</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-weight: bold; background-color: #F0F0F0;" scope="col" id="Risk-of-Bias">Risk of Bias</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Alvarez 2012</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Spain</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">226</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-negative</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Escherichia coli</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">8 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #90EE90;">low</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Bae 2021</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">South Korea</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">803</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-negative</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Escherichia coli (40.8%), Klebsiella (23.4%)</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">Continuous</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #90EE90;">low</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Blackberg 2022</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Sweden</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">286</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Streptococcus pyogenes</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">9 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Blackberg 2023</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Sweden</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">287</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Streptococcus dysgalactiae</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">7.9 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Chen 2020</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">China</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">167</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-negative</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Escherichia coli</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">11 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #90EE90;">low</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Chen 2023</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Taiwan</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">101</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-negative</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Klebsiella pneumoniae</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">11.5 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Choi 2012</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">South Korea</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">41</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Staphylococcus aureus</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Persistent bacteremia</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">Continuous</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Cillóniz 2017</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Spain</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Prospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">278</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Streptococcus pneumoniae</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">9.2 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #90EE90;">low</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Deguchi 2024</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Japan</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">221</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Staphylococcus aureus</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">24 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Edwards 2025</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Australia</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">84341</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Mixed</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">mixed_monomicrobial</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">Continuous</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Hamilton 2021</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">United Kingdom</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Prospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">3462</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Mixed</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">multiple</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">Continuous</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Hou 2023</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">China</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">148</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-negative</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Klebsiella pneumoniae</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">9.4 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Hsieh 2022</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Taiwan</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">meta_analysis</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">NA</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Mixed</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Mixed bacteria (focus on Gram-positive and Gram-negative)</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">Continuous</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FF9999;">critical</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Hsu 2014</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Taiwan</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">87</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Staphylococcus aureus</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">12 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Ishikawa 2025</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Japan</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">317</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Staphylococcus aureus</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">20 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Jerwood 2012</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">United Kingdom</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Prospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">48</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Mixed</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">multiple</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">icu_length_of_stay</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">5 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Ji 2020</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">United States</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">395</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Mixed</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">polymicrobial</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">24 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFCC99;">high</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Kassis 2009</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">United States</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">272</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Staphylococcus epidermidis_coagulase_negative</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">bacteremia_classification</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">16 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #90EE90;">low</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Khatib 2005</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">United States</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Prospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">312</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Staphylococcus aureus</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality; Persistent bacteremia</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">14 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #90EE90;">low</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Kim 2010</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Canada</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">684</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Staphylococcus aureus</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">12 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #90EE90;">low</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Krus 2021</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Sweden</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">263</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">non-beta-hemolytic streptococci</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">Continuous</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Lambregts 2017</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Netherlands</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">154</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Mixed</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">mixed_gram_positive_negative</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">16 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #90EE90;">low</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Laupland 2022</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Australia</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">16276</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Staphylococcus aureus</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">Continuous</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Laupland 2024</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Australia</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">population_based_cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">109772</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Mixed</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">mixed</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">Continuous</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Liao 2009</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Taiwan</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Prospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">231</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-negative</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Klebsiella pneumoniae</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">7 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Ljungquist 2025</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Sweden</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">population_based_cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">12585</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Mixed</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">mixed</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">Continuous</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Maillart 2012</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Belgium</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">167</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Staphylococcus aureus</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality; Persistent bacteremia</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">11.3 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Marco 2025</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Spain</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">1177</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-negative</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Pseudomonas aeruginosa</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">13 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Marra 2006</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">USA/Brazil</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">91</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Staphylococcus aureus</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">12 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Martinez 2006</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Spain</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">185</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-negative</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Escherichia coli</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">7 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Melling 2019</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">USA</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Prospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">263</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Staphylococcus aureus</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">microbiological_clearance</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">48 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Michelson 2021</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Germany</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">477</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Enterococcus spp.</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">10.5 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Minejima 2019</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">USA</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Prospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">884</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Staphylococcus aureus</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality; Persistent bacteremia</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">72 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Nadeem 2021</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">UAE</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">101</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Mixed</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Mixed organisms</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">Continuous</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFCC99;">high</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Ning 2016</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">China</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">886</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Mixed</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Multiple species (Enterobacter, E. coli, Staphylococcus aureus, Klebsiella, others)</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">Continuous</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Ok 2013</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">South Korea</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Prospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">67</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Staphylococcus aureus</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality; Persistent bacteremia</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">11.8 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Oldberg 2021</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Sweden</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">367</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Enterococcus faecalis</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">12 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #90EE90;">low</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Osaki 2020</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Japan</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">206</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Staphylococcus epidermidis, Staphylococcus hominis</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Persistent bacteremia</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">48 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #90EE90;">low</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Palmer 2013</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">United States</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Prospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">100</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-negative</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">mixed_gram_negative</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">11 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #90EE90;">low</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Papadimitriou-Olivgeris 2023</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Switzerland</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">779</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Staphylococcus aureus</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality; Persistent bacteremia</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">13 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Paquette 2021</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Canada</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Prospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">315</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Mixed</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">gram-positive, gram-negative, Candida</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">Continuous</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #90EE90;">low</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Peralta 2006</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Spain</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">105</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Streptococcus pneumoniae</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">NA</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">Continuous</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Peralta 2007</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Spain</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">459</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-negative</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Escherichia coli</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">10.25 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #90EE90;">low</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Peri 2026</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Australia</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Prospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">102</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Mixed</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Enterococcus faecium, Staphylococcus aureus, Klebsiella pneumoniae, Pseudomonas aeruginosa, Escherichia coli, Candida</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Persistent bacteremia</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">Continuous</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Rolo 2022</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Spain</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">328</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-negative</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Pseudomonas aeruginosa</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">16 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Santos-Patarroyo 2025</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">USA</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">164</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Staphylococcus aureus</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Persistent bacteremia</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">10 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Savithri 2011</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Australia</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">54</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Coagulase-negative staphylococci</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">24 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Simeon 2019</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">France</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Prospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">587</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Staphylococcus aureus</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">13.7 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #90EE90;">low</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Takahashi 2022</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Japan</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">245</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-negative</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Enterobacteriaceae</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">11 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Tsai 2025</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Taiwan</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">1015</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Mixed</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Mixed (Klebsiella, Staphylococcus aureus, Streptococcus, Escherichia coli, Enterococcus, anaerobes)</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">Continuous</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Turkeltaub 2024</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">Israel</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">60</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Mixed</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Staphylococcus aureus; Escherichia coli</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">Continuous</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Yang 2024</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">South Korea</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Prospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">1760</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-positive</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Staphylococcus aureus</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">Continuous</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Zhang 2020</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">China</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">509</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-negative</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Escherichia coli</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">8 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+    <tr><td headers="Author (Year)" class="gt_row gt_left" style="font-size: 11px;">Zhang 2021</td>
+<td headers="Country" class="gt_row gt_left" style="font-size: 11px;">China</td>
+<td headers="Study Design" class="gt_row gt_left" style="font-size: 11px;">Retrospective cohort</td>
+<td headers="N" class="gt_row gt_left" style="font-size: 11px;">509</td>
+<td headers="Pathogen Class" class="gt_row gt_left" style="font-size: 11px;">Gram-negative</td>
+<td headers="Specific Pathogen" class="gt_row gt_left" style="font-size: 11px;">Escherichia coli</td>
+<td headers="Main Outcome(s)" class="gt_row gt_left" style="font-size: 11px;">Mortality</td>
+<td headers="TTP Cutoff" class="gt_row gt_left" style="font-size: 11px;">8 h</td>
+<td headers="Risk of Bias" class="gt_row gt_left" style="font-size: 11px; color: #000000; background-color: #FFFF99;">moderate</td></tr>
+  </tbody>
+  
+</table>
+</div>
+</body>
+</html>

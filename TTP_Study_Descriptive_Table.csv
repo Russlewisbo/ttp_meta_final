@@ -1,0 +1,55 @@
+author_year,country,study_design_clean,n_total,pathogen_clean,pathogen_species,outcome_clean,ttp_cutoff,rob_overall
+Alvarez 2012,Spain,Retrospective cohort,226,Gram-negative,Escherichia coli,Mortality,8 h,low
+Bae 2021,South Korea,Retrospective cohort,803,Gram-negative,"Escherichia coli (40.8%), Klebsiella (23.4%)",Mortality,Continuous,low
+Blackberg 2022,Sweden,Retrospective cohort,286,Gram-positive,Streptococcus pyogenes,Mortality,9 h,moderate
+Blackberg 2023,Sweden,Retrospective cohort,287,Gram-positive,Streptococcus dysgalactiae,Mortality,7.9 h,moderate
+Chen 2020,China,Retrospective cohort,167,Gram-negative,Escherichia coli,Mortality,11 h,low
+Chen 2023,Taiwan,Retrospective cohort,101,Gram-negative,Klebsiella pneumoniae,Mortality,11.5 h,moderate
+Choi 2012,South Korea,Retrospective cohort,41,Gram-positive,Staphylococcus aureus,Persistent bacteremia,Continuous,moderate
+Cillóniz 2017,Spain,Prospective cohort,278,Gram-positive,Streptococcus pneumoniae,Mortality,9.2 h,low
+Deguchi 2024,Japan,Retrospective cohort,221,Gram-positive,Staphylococcus aureus,Mortality,24 h,moderate
+Edwards 2025,Australia,Retrospective cohort,84341,Mixed,mixed_monomicrobial,Mortality,Continuous,moderate
+Hamilton 2021,United Kingdom,Prospective cohort,3462,Mixed,multiple,Mortality,Continuous,moderate
+Hou 2023,China,Retrospective cohort,148,Gram-negative,Klebsiella pneumoniae,Mortality,9.4 h,moderate
+Hsieh 2022,Taiwan,meta_analysis,NA,Mixed,Mixed bacteria (focus on Gram-positive and Gram-negative),Mortality,Continuous,critical
+Hsu 2014,Taiwan,Retrospective cohort,87,Gram-positive,Staphylococcus aureus,Mortality,12 h,moderate
+Ishikawa 2025,Japan,Retrospective cohort,317,Gram-positive,Staphylococcus aureus,Mortality,20 h,moderate
+Jerwood 2012,United Kingdom,Prospective cohort,48,Mixed,multiple,icu_length_of_stay,5 h,moderate
+Ji 2020,United States,Retrospective cohort,395,Mixed,polymicrobial,Mortality,24 h,high
+Kassis 2009,United States,Retrospective cohort,272,Gram-positive,Staphylococcus epidermidis_coagulase_negative,bacteremia_classification,16 h,low
+Khatib 2005,United States,Prospective cohort,312,Gram-positive,Staphylococcus aureus,Mortality; Persistent bacteremia,14 h,low
+Kim 2010,Canada,Retrospective cohort,684,Gram-positive,Staphylococcus aureus,Mortality,12 h,low
+Krus 2021,Sweden,Retrospective cohort,263,Gram-positive,non-beta-hemolytic streptococci,Mortality,Continuous,moderate
+Lambregts 2017,Netherlands,Retrospective cohort,154,Mixed,mixed_gram_positive_negative,Mortality,16 h,low
+Laupland 2022,Australia,Retrospective cohort,16276,Gram-positive,Staphylococcus aureus,Mortality,Continuous,moderate
+Laupland 2024,Australia,population_based_cohort,109772,Mixed,mixed,Mortality,Continuous,moderate
+Liao 2009,Taiwan,Prospective cohort,231,Gram-negative,Klebsiella pneumoniae,Mortality,7 h,moderate
+Ljungquist 2025,Sweden,population_based_cohort,12585,Mixed,mixed,Mortality,Continuous,moderate
+Maillart 2012,Belgium,Retrospective cohort,167,Gram-positive,Staphylococcus aureus,Mortality; Persistent bacteremia,11.3 h,moderate
+Marco 2025,Spain,Retrospective cohort,1177,Gram-negative,Pseudomonas aeruginosa,Mortality,13 h,moderate
+Marra 2006,USA/Brazil,Retrospective cohort,91,Gram-positive,Staphylococcus aureus,Mortality,12 h,moderate
+Martinez 2006,Spain,Retrospective cohort,185,Gram-negative,Escherichia coli,Mortality,7 h,moderate
+Melling 2019,USA,Prospective cohort,263,Gram-positive,Staphylococcus aureus,microbiological_clearance,48 h,moderate
+Michelson 2021,Germany,Retrospective cohort,477,Gram-positive,Enterococcus spp.,Mortality,10.5 h,moderate
+Minejima 2019,USA,Prospective cohort,884,Gram-positive,Staphylococcus aureus,Mortality; Persistent bacteremia,72 h,moderate
+Nadeem 2021,UAE,Retrospective cohort,101,Mixed,Mixed organisms,Mortality,Continuous,high
+Ning 2016,China,Retrospective cohort,886,Mixed,"Multiple species (Enterobacter, E. coli, Staphylococcus aureus, Klebsiella, others)",Mortality,Continuous,moderate
+Ok 2013,South Korea,Prospective cohort,67,Gram-positive,Staphylococcus aureus,Mortality; Persistent bacteremia,11.8 h,moderate
+Oldberg 2021,Sweden,Retrospective cohort,367,Gram-positive,Enterococcus faecalis,Mortality,12 h,low
+Osaki 2020,Japan,Retrospective cohort,206,Gram-positive,"Staphylococcus epidermidis, Staphylococcus hominis",Persistent bacteremia,48 h,low
+Palmer 2013,United States,Prospective cohort,100,Gram-negative,mixed_gram_negative,Mortality,11 h,low
+Papadimitriou-Olivgeris 2023,Switzerland,Retrospective cohort,779,Gram-positive,Staphylococcus aureus,Mortality; Persistent bacteremia,13 h,moderate
+Paquette 2021,Canada,Prospective cohort,315,Mixed,"gram-positive, gram-negative, Candida",Mortality,Continuous,low
+Peralta 2006,Spain,Retrospective cohort,105,Gram-positive,Streptococcus pneumoniae,NA,Continuous,moderate
+Peralta 2007,Spain,Retrospective cohort,459,Gram-negative,Escherichia coli,Mortality,10.25 h,low
+Peri 2026,Australia,Prospective cohort,102,Mixed,"Enterococcus faecium, Staphylococcus aureus, Klebsiella pneumoniae, Pseudomonas aeruginosa, Escherichia coli, Candida",Persistent bacteremia,Continuous,moderate
+Rolo 2022,Spain,Retrospective cohort,328,Gram-negative,Pseudomonas aeruginosa,Mortality,16 h,moderate
+Santos-Patarroyo 2025,USA,Retrospective cohort,164,Gram-positive,Staphylococcus aureus,Persistent bacteremia,10 h,moderate
+Savithri 2011,Australia,Retrospective cohort,54,Gram-positive,Coagulase-negative staphylococci,Mortality,24 h,moderate
+Simeon 2019,France,Prospective cohort,587,Gram-positive,Staphylococcus aureus,Mortality,13.7 h,low
+Takahashi 2022,Japan,Retrospective cohort,245,Gram-negative,Enterobacteriaceae,Mortality,11 h,moderate
+Tsai 2025,Taiwan,Retrospective cohort,1015,Mixed,"Mixed (Klebsiella, Staphylococcus aureus, Streptococcus, Escherichia coli, Enterococcus, anaerobes)",Mortality,Continuous,moderate
+Turkeltaub 2024,Israel,Retrospective cohort,60,Mixed,Staphylococcus aureus; Escherichia coli,Mortality,Continuous,moderate
+Yang 2024,South Korea,Prospective cohort,1760,Gram-positive,Staphylococcus aureus,Mortality,Continuous,moderate
+Zhang 2020,China,Retrospective cohort,509,Gram-negative,Escherichia coli,Mortality,8 h,moderate
+Zhang 2021,China,Retrospective cohort,509,Gram-negative,Escherichia coli,Mortality,8 h,moderate
