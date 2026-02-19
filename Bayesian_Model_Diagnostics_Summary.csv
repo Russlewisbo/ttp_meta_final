@@ -1,0 +1,9 @@
+Model,Parameter,Rhat,ESS_bulk,ESS_tail
+Overall Mortality,Pooled effect (μ),1.001,2070,3691
+Overall Mortality,Between-study SD (τ),1.001,2343,3928
+Gram-Positive,Pooled effect (μ),1.002,2695,3883
+Gram-Positive,Between-study SD (τ),1.001,2808,4443
+Gram-Negative,Pooled effect (μ),1.000,4791,4579
+Gram-Negative,Between-study SD (τ),1.001,3374,4210
+Persistent Bacteremia,Pooled effect (μ),1.000,2474,3711
+Persistent Bacteremia,Between-study SD (τ),1.003,2488,3557
