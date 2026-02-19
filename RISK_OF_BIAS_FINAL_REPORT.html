@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.16">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>risk_of_bias_final_report</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="RISK_OF_BIAS_FINAL_REPORT_files/libs/clipboard/clipboard.min.js"></script>
+<script src="RISK_OF_BIAS_FINAL_REPORT_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="RISK_OF_BIAS_FINAL_REPORT_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="RISK_OF_BIAS_FINAL_REPORT_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="RISK_OF_BIAS_FINAL_REPORT_files/libs/quarto-html/popper.min.js"></script>
+<script src="RISK_OF_BIAS_FINAL_REPORT_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="RISK_OF_BIAS_FINAL_REPORT_files/libs/quarto-html/anchor.min.js"></script>
+<link href="RISK_OF_BIAS_FINAL_REPORT_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="RISK_OF_BIAS_FINAL_REPORT_files/libs/quarto-html/quarto-syntax-highlighting-a67ac2868200dddf7a4f0e3ae403775c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="RISK_OF_BIAS_FINAL_REPORT_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="RISK_OF_BIAS_FINAL_REPORT_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="RISK_OF_BIAS_FINAL_REPORT_files/libs/bootstrap/bootstrap-6d31a3750adcaf252a7dbb50eb1c0010.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+
+<section id="risk-of-bias-assessment---final-report" class="level1">
+<h1>Risk of Bias Assessment - Final Report</h1>
+<section id="ttp-meta-analysis-corrected-study-count" class="level2">
+<h2 class="anchored" data-anchor-id="ttp-meta-analysis-corrected-study-count">TTP Meta-Analysis: Corrected Study Count</h2>
+<p><strong>Date:</strong> February 19, 2026<br>
+<strong>Analysis:</strong> Time to Positivity and Clinical Outcomes in Bacteremia</p>
+<hr>
+</section>
+<section id="executive-summary" class="level2">
+<h2 class="anchored" data-anchor-id="executive-summary">Executive Summary</h2>
+<section id="inclusion-criteria-met" class="level3">
+<h3 class="anchored" data-anchor-id="inclusion-criteria-met">Inclusion Criteria Met</h3>
+<ul>
+<li><strong>54 studies</strong> were potentially eligible after initial screening</li>
+<li><strong>36 unique studies</strong> met all inclusion criteria and contributed analyzable effect sizes</li>
+<li><strong>42 total effect sizes</strong> were included in the meta-analysis
+<ul>
+<li>35 mortality effect sizes (33 unique studies)</li>
+<li>5 persistent bacteremia effect sizes</li>
+<li>2 microbiological clearance effect sizes</li>
+</ul></li>
+</ul>
+</section>
+<section id="why-36-studies-not-40" class="level3">
+<h3 class="anchored" data-anchor-id="why-36-studies-not-40">Why 36 Studies, Not 40?</h3>
+<p>The original project documentation referenced “40 unique studies,” but the accurate count is <strong>36 studies</strong>. The difference is due to:</p>
+<ol type="1">
+<li><strong>Studies with insufficient data</strong> (n=14): Had PICO-compliant outcomes but lacked:
+<ul>
+<li>Complete 2×2 tables for effect size calculation, AND</li>
+<li>Reported effect estimates with confidence intervals</li>
+</ul></li>
+<li><strong>Studies with unusable effect estimates</strong> (n=4): Reported outcomes in formats not convertible to odds ratios (e.g., continuous outcomes, severity scores)</li>
+</ol>
+</section>
+<section id="multiple-effect-sizes" class="level3">
+<h3 class="anchored" data-anchor-id="multiple-effect-sizes">Multiple Effect Sizes</h3>
+<p>Six studies contributed <strong>2 effect sizes each</strong> (different outcomes or subgroups): - <strong>Cilloniz2017</strong>: Adjusted and unadjusted mortality estimates - <strong>Hou2023</strong>: Two different mortality outcomes - <strong>Marco2025</strong>: Two genuinely different subgroups - <strong>Melling2019</strong>: Mortality and persistent bacteremia - <strong>Minejima2019</strong>: Mortality and persistent bacteremia - <strong>Ok2013</strong>: Two different mortality outcomes</p>
+<p>This accounts for 42 effect sizes from 36 studies (36 + 6 = 42).</p>
+<hr>
+</section>
+</section>
+<section id="overall-risk-of-bias" class="level2">
+<h2 class="anchored" data-anchor-id="overall-risk-of-bias">Overall Risk of Bias</h2>
+<section id="distribution-n36-studies" class="level3">
+<h3 class="anchored" data-anchor-id="distribution-n36-studies">Distribution (n=36 studies)</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Risk Level</th>
+<th>n</th>
+<th>Percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Low</strong></td>
+<td>10</td>
+<td>27.8%</td>
+</tr>
+<tr class="even">
+<td><strong>Moderate</strong></td>
+<td>24</td>
+<td>66.7%</td>
+</tr>
+<tr class="odd">
+<td><strong>High</strong></td>
+<td>1</td>
+<td>2.8%</td>
+</tr>
+<tr class="even">
+<td><strong>Critical</strong></td>
+<td>1</td>
+<td>2.8%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key Finding:</strong> Two-thirds of studies (67%) had moderate risk of bias, primarily due to inadequate adjustment for confounders in the Comparability domain.</p>
+<hr>
+</section>
+</section>
+<section id="domain-specific-risk-of-bias" class="level2">
+<h2 class="anchored" data-anchor-id="domain-specific-risk-of-bias">Domain-Specific Risk of Bias</h2>
+<section id="summary-table" class="level3">
+<h3 class="anchored" data-anchor-id="summary-table">Summary Table</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Domain</th>
+<th>Low Risk</th>
+<th>Moderate Risk</th>
+<th>High Risk</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Selection</strong></td>
+<td>14 (38.9%)</td>
+<td>21 (58.3%)</td>
+<td>1 (2.8%)</td>
+</tr>
+<tr class="even">
+<td><strong>Comparability</strong></td>
+<td>10 (27.8%)</td>
+<td>25 (69.4%)</td>
+<td>1 (2.8%)</td>
+</tr>
+<tr class="odd">
+<td><strong>Outcome Assessment</strong></td>
+<td>20 (55.6%)</td>
+<td>16 (44.4%)</td>
+<td>0 (0%)</td>
+</tr>
+<tr class="even">
+<td><strong>Statistical Analysis</strong></td>
+<td>27 (75.0%)</td>
+<td>9 (25.0%)</td>
+<td>0 (0%)</td>
+</tr>
+<tr class="odd">
+<td><strong>Attrition</strong></td>
+<td>31 (86.1%)</td>
+<td>5 (13.9%)</td>
+<td>0 (0%)</td>
+</tr>
+<tr class="even">
+<td><strong>Prognostic Measurement</strong></td>
+<td>18 (50.0%)</td>
+<td>15 (41.7%)</td>
+<td>3 (8.3%)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="domain-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="domain-analysis">Domain Analysis</h3>
+<section id="best-domain-attrition-86.1-low-risk" class="level4">
+<h4 class="anchored" data-anchor-id="best-domain-attrition-86.1-low-risk">1. <strong>Best Domain: Attrition (86.1% low risk)</strong></h4>
+<ul>
+<li>Most studies had excellent follow-up completeness</li>
+<li>Minimal loss to follow-up for mortality outcomes</li>
+<li>Clear documentation of study flow</li>
+</ul>
+</section>
+<section id="most-problematic-domain-comparability-69.4-moderate-risk-2.8-high-risk" class="level4">
+<h4 class="anchored" data-anchor-id="most-problematic-domain-comparability-69.4-moderate-risk-2.8-high-risk">2. <strong>Most Problematic Domain: Comparability (69.4% moderate risk, 2.8% high risk)</strong></h4>
+<ul>
+<li><strong>Main Issue:</strong> Inadequate adjustment for confounders</li>
+<li><strong>Common unmeasured confounders:</strong>
+<ul>
+<li>Disease severity scores (APACHE II, SOFA, Pitt bacteremia score)</li>
+<li>Appropriateness of empiric antibiotic therapy</li>
+<li>Source control adequacy and timing</li>
+<li>Comorbidity burden (Charlson index)</li>
+<li>Time to effective therapy</li>
+</ul></li>
+<li><strong>Why this matters:</strong> TTP may be a proxy for disease severity. Without proper adjustment, the observed association could be confounded by baseline patient characteristics.</li>
+</ul>
+</section>
+<section id="selection-domain-38.9-low-risk" class="level4">
+<h4 class="anchored" data-anchor-id="selection-domain-38.9-low-risk">3. <strong>Selection Domain (38.9% low risk)</strong></h4>
+<ul>
+<li><strong>Common issues:</strong>
+<ul>
+<li>Convenience sampling from single centers</li>
+<li>Retrospective designs with potential selection bias</li>
+<li>Unclear inclusion/exclusion criteria</li>
+</ul></li>
+</ul>
+</section>
+<section id="prognostic-measurement-50.0-low-risk-8.3-high-risk" class="level4">
+<h4 class="anchored" data-anchor-id="prognostic-measurement-50.0-low-risk-8.3-high-risk">4. <strong>Prognostic Measurement (50.0% low risk, 8.3% high risk)</strong></h4>
+<ul>
+<li><strong>Issues with TTP measurement:</strong>
+<ul>
+<li>Variable blood culture systems (BacT/ALERT, BACTEC, etc.)</li>
+<li>Different incubation protocols</li>
+<li>Inconsistent cutpoint selection (data-driven vs.&nbsp;a priori)</li>
+<li>Continuous vs.&nbsp;dichotomized analysis</li>
+</ul></li>
+<li><strong>High-risk studies:</strong> Used data-driven cutpoints or had unclear TTP measurement protocols</li>
+</ul>
+</section>
+<section id="outcome-assessment-55.6-low-risk" class="level4">
+<h4 class="anchored" data-anchor-id="outcome-assessment-55.6-low-risk">5. <strong>Outcome Assessment (55.6% low risk)</strong></h4>
+<ul>
+<li>Most studies used objective outcomes (mortality, persistent bacteremia)</li>
+<li>Some lacked blinding of outcome assessors</li>
+<li>Mortality is relatively robust to measurement bias</li>
+</ul>
+</section>
+<section id="statistical-analysis-75.0-low-risk" class="level4">
+<h4 class="anchored" data-anchor-id="statistical-analysis-75.0-low-risk">6. <strong>Statistical Analysis (75.0% low risk)</strong></h4>
+<ul>
+<li>Most studies used appropriate statistical methods</li>
+<li>Good reporting of effect estimates and confidence intervals</li>
+<li>Some studies lacked multivariable adjustment</li>
+</ul>
+<hr>
+</section>
+</section>
+</section>
+<section id="implications-for-meta-analysis-interpretation" class="level2">
+<h2 class="anchored" data-anchor-id="implications-for-meta-analysis-interpretation">Implications for Meta-Analysis Interpretation</h2>
+<section id="strengths-despite-moderate-risk" class="level3">
+<h3 class="anchored" data-anchor-id="strengths-despite-moderate-risk">Strengths Despite Moderate Risk</h3>
+<ol type="1">
+<li><strong>Robust outcomes:</strong> Mortality is objective and hard to misclassify</li>
+<li><strong>Consistent direction:</strong> Despite heterogeneity, effect direction is consistent across studies</li>
+<li><strong>No high attrition:</strong> Follow-up completeness reduces bias from missing data</li>
+<li><strong>Meta-regression tested ROB:</strong> Overall risk of bias did NOT modify the TTP-mortality association (95% CrI for ROB coefficient included zero)</li>
+</ol>
+</section>
+<section id="limitations-to-consider" class="level3">
+<h3 class="anchored" data-anchor-id="limitations-to-consider">Limitations to Consider</h3>
+<ol type="1">
+<li><strong>Residual confounding:</strong> The association may be partially explained by unmeasured severity</li>
+<li><strong>Publication bias:</strong> Significant funnel asymmetry suggests selective reporting</li>
+<li><strong>Observational data:</strong> All studies are observational (no RCTs)</li>
+<li><strong>Heterogeneous TTP measurement:</strong> Different cutpoints and systems complicate interpretation</li>
+</ol>
+</section>
+<section id="clinical-validity" class="level3">
+<h3 class="anchored" data-anchor-id="clinical-validity">Clinical Validity</h3>
+<p>Despite moderate risk of bias, the findings appear <strong>clinically valid</strong> because: - Effect size is consistent across different pathogen classes - Association persists in adjusted analyses when reported - Biological plausibility (higher inoculum → worse outcomes) - Consistency with prior meta-analyses</p>
+<hr>
+</section>
+</section>
+<section id="studies-with-highcritical-risk-of-bias" class="level2">
+<h2 class="anchored" data-anchor-id="studies-with-highcritical-risk-of-bias">Studies with High/Critical Risk of Bias</h2>
+<section id="critical-risk-n1" class="level3">
+<h3 class="anchored" data-anchor-id="critical-risk-n1">Critical Risk (n=1)</h3>
+<ul>
+<li><strong>Hsieh 2022</strong>: Meta-analysis with methodological concerns</li>
+</ul>
+</section>
+<section id="high-risk-n1" class="level3">
+<h3 class="anchored" data-anchor-id="high-risk-n1">High Risk (n=1)</h3>
+<ul>
+<li><strong>Ji 2020</strong>: Multiple domains rated high risk
+<ul>
+<li>Poor prognostic measurement (unclear TTP definition)</li>
+<li>Inadequate statistical analysis</li>
+<li>High attrition</li>
+</ul></li>
+</ul>
+<p><strong>Sensitivity Analysis:</strong> Excluding Ji 2020 reduced the pooled OR from 2.14 to 2.00 (95% CrI: 1.61-2.47), indicating the main finding is robust even without this high-risk study.</p>
+<hr>
+</section>
+</section>
+<section id="recommendations-for-future-research" class="level2">
+<h2 class="anchored" data-anchor-id="recommendations-for-future-research">Recommendations for Future Research</h2>
+<section id="study-design" class="level3">
+<h3 class="anchored" data-anchor-id="study-design">Study Design</h3>
+<ol type="1">
+<li><strong>Prospective cohorts</strong> with pre-specified TTP cutpoints</li>
+<li><strong>Standardized TTP measurement</strong> protocols across sites</li>
+<li><strong>Comprehensive confounder adjustment:</strong>
+<ul>
+<li>Disease severity scores</li>
+<li>Appropriateness of empiric therapy</li>
+<li>Time to source control</li>
+<li>Comorbidity indices</li>
+</ul></li>
+</ol>
+</section>
+<section id="reporting" class="level3">
+<h3 class="anchored" data-anchor-id="reporting">Reporting</h3>
+<ol type="1">
+<li>Report both <strong>continuous TTP</strong> (per hour) and dichotomized analyses</li>
+<li>Provide <strong>adjusted and unadjusted</strong> estimates</li>
+<li>Document <strong>blood culture system</strong> and incubation protocol</li>
+<li>Justify <strong>TTP cutpoint selection</strong> (a priori vs.&nbsp;data-driven)</li>
+</ol>
+</section>
+<section id="dose-response" class="level3">
+<h3 class="anchored" data-anchor-id="dose-response">Dose-Response</h3>
+<p>Future meta-analyses should incorporate continuous TTP data to assess dose-response relationships and identify optimal cutpoints.</p>
+<hr>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>The risk of bias assessment reveals that while most studies (67%) have <strong>moderate overall risk</strong>, the findings appear <strong>robust and clinically valid</strong>. The main concern is <strong>residual confounding</strong> due to inadequate adjustment for disease severity, but the consistency of findings across diverse populations and pathogen classes supports the validity of TTP as a prognostic marker in bacteremia.</p>
+<p><strong>Take-Home Message:</strong> The TTP-mortality association is likely real, though the magnitude may be partially explained by unmeasured confounders. TTP remains a valuable early warning sign that can be used immediately upon culture positivity to risk-stratify patients.</p>
+<hr>
+</section>
+<section id="files-generated" class="level2">
+<h2 class="anchored" data-anchor-id="files-generated">Files Generated</h2>
+<ol type="1">
+<li><strong>bias_stoplight_included.png</strong> - Individual study risk assessment (10”×14”)</li>
+<li><strong>bias_summary_included.png</strong> - Domain-specific risk distribution</li>
+<li><strong>bias_overall_included.png</strong> - Overall risk of bias distribution</li>
+<li><strong>bias_complete_summary_included.png</strong> - Combined publication-ready figure</li>
+<li><strong>TTP_Bias_Assessment_Included_Details.csv</strong> - Study-level assessment data</li>
+<li><strong>TTP_Bias_Assessment_Included_Summary.csv</strong> - Domain summary table</li>
+<li><strong>TTP_Final_Included_Studies_ROB.csv</strong> - Complete study list with ROB scores</li>
+</ol>
+<hr>
+<p><strong>Assessment completed:</strong> February 19, 2026<br>
+<strong>Assessor:</strong> Russell Lewis<br>
+<strong>Tool:</strong> QUIPS (Quality In Prognosis Studies)<br>
+<strong>Studies assessed:</strong> 36 unique studies contributing 42 effect sizes</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
