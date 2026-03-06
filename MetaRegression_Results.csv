@@ -1,0 +1,5 @@
+Moderator,k,QM,p-value,Baseline I²,Residual I²,I² Reduction
+Pathogen Class,33,3.97,0.137,98.6%,98.3%,0.3%
+Risk of Bias,33,2.74,0.0977,98.6%,98.5%,0.1%
+Publication Year,33,3.22,0.0727,98.6%,98.0%,0.6%
+TTP Cutpoint (hours),26,11.01,<0.001,98.6%,71.3%,27.3%
